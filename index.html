@@ -3,558 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nepal Smart Tourism Hub — Plan by Altitude</title>
+<title>Nepal Smart Tourism Hub — Plan Nepal by Altitude</title>
+<meta name="description" content="Discover Nepal through elevation — from the subtropical Terai to the summit of Everest. Smart trip planning, curated journeys, and real altitude data for every traveler.">
+
+<!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --night:#132029;
-    --night-2:#1b2f3b;
-    --dawn:#F1E9D8;
-    --dawn-2:#E7DCC4;
-    --amber:#E0973D;
-    --prayer:#B23A32;
-    --pine:#3C5A45;
-    --gold:#C9A66B;
-    --ink:#182430;
-    --paper:#FBF8F1;
-    --line:rgba(230,220,196,0.18);
-    --line-dark:rgba(24,36,48,0.12);
-    --display: "Fraunces", serif;
-    --body: "Work Sans", sans-serif;
-    --mono: "JetBrains Mono", monospace;
-  }
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  *{box-sizing:border-box;}
-  html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    font-family:var(--body);
-    background:var(--paper);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-  }
-  img,svg{display:block;max-width:100%;}
-  a{color:inherit;}
-  h1,h2,h3{font-family:var(--display);margin:0;font-weight:600;}
-  p{margin:0;}
-  :focus-visible{outline:2px solid var(--amber);outline-offset:3px;}
-
-  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
-
-  /* ---------- NAV ---------- */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:rgba(19,32,41,0.92);
-    backdrop-filter:blur(8px);
-    border-bottom:1px solid var(--line);
-  }
-  nav{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:16px 28px;max-width:1180px;margin:0 auto;color:var(--dawn);
-  }
-  .logo{
-    display:flex;align-items:center;gap:10px;
-    font-family:var(--display);font-size:1.15rem;font-weight:600;letter-spacing:0.02em;
-    color:var(--dawn);text-decoration:none;
-  }
-  .logo-mark{width:26px;height:26px;flex:none;}
-  nav ul{list-style:none;display:flex;gap:32px;margin:0;padding:0;}
-  nav ul a{
-    text-decoration:none;font-size:0.92rem;color:var(--dawn-2);
-    transition:color .2s ease;
-  }
-  nav ul a:hover{color:var(--amber);}
-  .nav-cta{
-    display:inline-block;padding:10px 20px;border-radius:2px;
-    background:var(--amber);color:var(--night);text-decoration:none;
-    font-weight:600;font-size:0.88rem;transition:transform .15s ease, background .2s ease;
-  }
-  .nav-cta:hover{background:#eeaa5c;transform:translateY(-1px);}
-
-  /* ---------- HERO ---------- */
-  .hero{
-    position:relative;overflow:hidden;
-    background:linear-gradient(180deg,var(--night) 0%, var(--night-2) 65%, #24404f 100%);
-    color:var(--dawn);
-    padding:96px 0 0;
-  }
-  .hero-inner{
-    max-width:1180px;margin:0 auto;padding:0 28px 60px;
-    display:grid;grid-template-columns:1.1fr 0.9fr;gap:40px;align-items:end;
-    position:relative;z-index:2;
-  }
-  .eyebrow{
-    font-family:var(--mono);font-size:0.78rem;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--amber);margin-bottom:18px;display:block;
-  }
-  .hero h1{
-    font-size:clamp(2.6rem,5.2vw,4.4rem);line-height:1.02;letter-spacing:-0.01em;
-    max-width:12ch;
-  }
-  .hero h1 em{
-    font-style:italic;color:var(--amber);
-  }
-  .hero-sub{
-    max-width:34ch;font-size:1.05rem;line-height:1.55;color:var(--dawn-2);margin-top:22px;
-  }
-  .hero-ctas{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;}
-  .btn{
-    padding:13px 26px;border-radius:2px;text-decoration:none;font-weight:600;font-size:0.92rem;
-    display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease, opacity .2s ease;
-  }
-  .btn-primary{background:var(--amber);color:var(--night);}
-  .btn-primary:hover{transform:translateY(-2px);}
-  .btn-ghost{border:1px solid rgba(241,233,216,0.35);color:var(--dawn);}
-  .btn-ghost:hover{border-color:var(--amber);color:var(--amber);}
-
-  .hero-stat-card{
-    background:rgba(241,233,216,0.06);
-    border:1px solid var(--line);
-    border-radius:4px;padding:22px 24px;
-    backdrop-filter:blur(6px);
-  }
-  .hero-stat-card + .hero-stat-card{margin-top:14px;}
-  .hero-stats{display:flex;flex-direction:column;}
-  .stat-num{font-family:var(--mono);font-size:1.6rem;color:var(--amber);}
-  .stat-label{font-size:0.82rem;color:var(--dawn-2);margin-top:2px;}
-
-  .skyline{position:absolute;left:0;right:0;bottom:0;z-index:1;opacity:0.9;}
-
-  /* ---------- SECTION HEADS ---------- */
-  section{padding:96px 0;}
-  .section-head{max-width:640px;margin:0 auto 56px;text-align:left;}
-  .section-head .eyebrow{color:var(--prayer);}
-  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);line-height:1.1;}
-  .section-head p{margin-top:14px;color:#4b5a63;font-size:1.02rem;line-height:1.55;}
-  .on-dark .section-head p{color:var(--dawn-2);}
-
-  /* ---------- ALTITUDE LINE (signature) ---------- */
-  .altitude{
-    background:var(--night);color:var(--dawn);
-  }
-  .altitude-scale{
-    position:relative;margin-top:70px;padding-bottom:10px;
-    overflow-x:auto;
-  }
-  .altitude-track{
-    position:relative;height:340px;min-width:920px;
-  }
-  .altitude-track svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
-  .alt-baseline{
-    position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);
-  }
-  .alt-gridline{position:absolute;left:0;right:0;border-top:1px dashed rgba(241,233,216,0.12);}
-  .alt-gridlabel{
-    position:absolute;left:-6px;transform:translate(-100%,-50%);
-    font-family:var(--mono);font-size:0.68rem;color:rgba(241,233,216,0.4);
-  }
-  .alt-point{
-    position:absolute;transform:translate(-50%,50%);
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    width:150px;
-  }
-  .alt-point.flip{flex-direction:column-reverse;}
-  .alt-dot{
-    width:11px;height:11px;border-radius:50%;background:var(--amber);
-    border:2px solid var(--night);box-shadow:0 0 0 1px var(--amber);flex:none;
-  }
-  .alt-card{text-align:center;}
-  .alt-elev{font-family:var(--mono);font-size:0.82rem;color:var(--amber);}
-  .alt-name{font-family:var(--display);font-size:1.05rem;margin-top:2px;}
-  .alt-tag{font-size:0.78rem;color:var(--dawn-2);margin-top:2px;}
-
-  /* ---------- DESTINATIONS GRID ---------- */
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
-  .dest-card{
-    border:1px solid var(--line-dark);border-radius:4px;overflow:hidden;
-    background:var(--paper);transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .dest-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px rgba(24,36,48,0.1);}
-  .dest-art{height:150px;position:relative;overflow:hidden;}
-  .dest-body{padding:20px 22px 24px;}
-  .dest-elev{font-family:var(--mono);font-size:0.76rem;color:var(--prayer);letter-spacing:0.04em;}
-  .dest-body h3{font-size:1.2rem;margin-top:6px;}
-  .dest-body p{margin-top:8px;font-size:0.92rem;color:#4b5a63;line-height:1.5;}
-
-  /* ---------- SMART FEATURES ---------- */
-  .features{background:var(--dawn-2);}
-  .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-  .feat-card{
-    background:var(--paper);border:1px solid var(--line-dark);border-radius:4px;
-    padding:26px 22px;
-  }
-  .feat-icon{width:34px;height:34px;color:var(--pine);margin-bottom:18px;}
-  .feat-card h3{font-size:1.05rem;}
-  .feat-card p{margin-top:10px;font-size:0.88rem;color:#4b5a63;line-height:1.5;}
-
-  /* ---------- CULTURE STRIP ---------- */
-  .culture{background:var(--pine);color:var(--dawn);}
-  .culture .section-head p{color:rgba(241,233,216,0.8);}
-  .culture-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(241,233,216,0.16);}
-  .culture-item{background:var(--pine);padding:28px 22px;}
-  .culture-item .eyebrow{color:var(--gold);margin-bottom:10px;}
-  .culture-item h3{font-size:1.05rem;font-family:var(--display);}
-  .culture-item p{margin-top:8px;font-size:0.86rem;color:rgba(241,233,216,0.75);line-height:1.5;}
-
-  /* ---------- CTA ---------- */
-  .cta{background:var(--paper);text-align:center;}
-  .cta-box{
-    max-width:720px;margin:0 auto;padding:64px 40px;border:1px solid var(--line-dark);
-    border-radius:6px;background:linear-gradient(160deg,#fff, var(--dawn-2));
-  }
-  .cta-box h2{font-size:clamp(1.8rem,3vw,2.4rem);}
-  .cta-box p{margin-top:14px;color:#4b5a63;font-size:1rem;max-width:44ch;margin-left:auto;margin-right:auto;}
-  .cta-box .hero-ctas{justify-content:center;margin-top:28px;}
-  .cta-box .btn-primary{background:var(--prayer);color:var(--dawn);}
-  .cta-box .btn-ghost{border-color:var(--line-dark);color:var(--ink);}
-  .cta-box .btn-ghost:hover{border-color:var(--prayer);color:var(--prayer);}
-
-  /* ---------- FOOTER ---------- */
-  footer{background:var(--night);color:var(--dawn-2);padding:56px 0 28px;}
-  .footer-top{
-    display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;
-    padding-bottom:36px;border-bottom:1px solid var(--line);
-  }
-  .footer-brand .logo{margin-bottom:14px;}
-  .footer-brand p{max-width:32ch;font-size:0.88rem;line-height:1.5;color:rgba(241,233,216,0.55);}
-  .footer-cols{display:flex;gap:60px;flex-wrap:wrap;}
-  .footer-col h4{
-    font-family:var(--mono);font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;
-    color:var(--amber);margin-bottom:14px;font-weight:500;
-  }
-  .footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;}
-  .footer-col a{text-decoration:none;font-size:0.88rem;color:rgba(241,233,216,0.7);transition:color .2s;}
-  .footer-col a:hover{color:var(--amber);}
-  .footer-bottom{
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-    padding-top:22px;font-size:0.8rem;color:rgba(241,233,216,0.4);
-  }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width: 860px){
-    nav ul{display:none;}
-    .hero-inner{grid-template-columns:1fr;}
-    .grid-3{grid-template-columns:1fr;}
-    .grid-4{grid-template-columns:repeat(2,1fr);}
-    .culture-grid{grid-template-columns:repeat(2,1fr);}
-    .footer-top{flex-direction:column;}
-  }
-  @media (max-width: 480px){
-    .grid-4{grid-template-columns:1fr;}
-    .culture-grid{grid-template-columns:1fr;}
-    .hero{padding-top:80px;}
-  }
-
-  @media (prefers-reduced-motion: reduce){
-    html{scroll-behavior:auto;}
-    *{transition:none !important;animation:none !important;}
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header>
-  <nav>
-    <a href="#top" class="logo">
-      <svg class="logo-mark" viewBox="0 0 26 26" fill="none">
-        <path d="M2 20L9 8L13 14L17 6L24 20H2Z" fill="#E0973D"/>
-        <circle cx="13" cy="4" r="2" fill="#F1E9D8"/>
-      </svg>
-      Nepal Smart Tourism Hub
+<!-- ============================================= -->
+<!-- PRELOADER / ELEVATION MARKER CURSOR (optional) -->
+<!-- ============================================= -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- ============================================= -->
+<!-- NAVIGATION                                     -->
+<!-- ============================================= -->
+<header class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="#home" class="nav__brand">
+      <span class="nav__brand-mark">NSTH</span>
+      <span class="nav__brand-text">Nepal Smart<br>Tourism Hub</span>
     </a>
-    <ul>
-      <li><a href="#altitude">Destinations</a></li>
-      <li><a href="#features">Plan a Trip</a></li>
-      <li><a href="#culture">Culture</a></li>
-      <li><a href="#about">About</a></li>
-    </ul>
-    <a href="#features" class="nav-cta">Start Planning</a>
-  </nav>
+
+    <nav class="nav__links" id="navLinks">
+      <a href="#altitude" class="nav__link" data-nav>Altitude</a>
+      <a href="#destinations" class="nav__link" data-nav>Destinations</a>
+      <a href="#packages" class="nav__link" data-nav>Packages</a>
+      <a href="#planner" class="nav__link" data-nav>Planner</a>
+      <a href="#culture" class="nav__link" data-nav>Culture</a>
+      <a href="#gallery" class="nav__link" data-nav>Gallery</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="#booking" class="btn btn--small btn--amber">Start Planning</a>
+    </div>
+
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav__mobile" id="navMobile">
+    <a href="#altitude" data-nav>Altitude</a>
+    <a href="#destinations" data-nav>Destinations</a>
+    <a href="#packages" data-nav>Packages</a>
+    <a href="#planner" data-nav>Planner</a>
+    <a href="#culture" data-nav>Culture</a>
+    <a href="#gallery" data-nav>Gallery</a>
+    <a href="#booking" data-nav>Plan My Trip</a>
+  </div>
 </header>
 
-<section class="hero" id="top">
-  <div class="hero-inner">
-    <div>
-      <span class="eyebrow">150m to 8,849m · one country</span>
-      <h1>Nepal, planned <em>by altitude.</em></h1>
-      <p class="hero-sub">From the jungle lowlands of the Terai to the summit of the world, every place in Nepal sits at a different height — and a different pace of life. Pick your elevation, and we'll build the trip around it.</p>
-      <div class="hero-ctas">
-        <a href="#altitude" class="btn btn-primary">Explore the altitude line</a>
-        <a href="#features" class="btn btn-ghost">See smart planning tools</a>
-      </div>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat-card">
-        <div class="stat-num">8,699m</div>
-        <div class="stat-label">total elevation range, Lumbini to Everest</div>
-      </div>
-      <div class="hero-stat-card">
-        <div class="stat-num">7</div>
-        <div class="stat-label">climate zones in a single itinerary</div>
-      </div>
+<!-- ============================================= -->
+<!-- HERO                                           -->
+<!-- ============================================= -->
+<section class="hero" id="home">
+  <div class="hero__bg">
+    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=2000&q=80" alt="Sunrise over the Himalayan peaks of Nepal" loading="eager">
+    <div class="hero__scrim"></div>
+    <div class="hero__altitude-gradient" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__content">
+    <p class="eyebrow eyebrow--light" data-reveal>
+      <span class="eyebrow__line"></span> 8,848M TO 60M ABOVE SEA LEVEL
+    </p>
+    <h1 class="hero__title" data-reveal>
+      Plan Nepal<br>
+      <span class="hero__title-accent">by Altitude</span>
+    </h1>
+    <p class="hero__type" id="heroTyping" data-reveal></p>
+    <p class="hero__sub" data-reveal>
+      One country, every elevation. From subtropical jungle at 60 metres to the roof of the world at 8,848 — choose your altitude, and we'll show you the Nepal that lives there.
+    </p>
+    <div class="hero__actions" data-reveal>
+      <a href="#altitude" class="btn btn--amber btn--ripple">Explore the Altitude Line</a>
+      <a href="#planner" class="btn btn--ghost-light btn--ripple">Try the Smart Planner</a>
     </div>
   </div>
 
-  <svg class="skyline" viewBox="0 0 1440 220" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,220 L0,150 L120,90 L220,140 L340,60 L430,110 L560,30 L650,95 L760,50 L860,120 L980,70 L1090,130 L1200,80 L1320,140 L1440,100 L1440,220 Z" fill="#1b2f3b"/>
-    <path d="M0,220 L0,180 L150,130 L260,165 L380,110 L470,150 L600,95 L700,145 L820,105 L930,160 L1050,120 L1160,170 L1290,130 L1440,175 L1440,220 Z" fill="#24404f" opacity="0.8"/>
-  </svg>
-</section>
-
-<section class="altitude" id="altitude">
-  <div class="wrap on-dark">
-    <div class="section-head">
-      <span class="eyebrow">The altitude line</span>
-      <h2>Same country, seven different worlds.</h2>
-      <p>Every marker below sits at its true elevation. Scroll sideways to travel from the subtropical Terai plains up to Everest — the route a real multi-region itinerary would follow.</p>
-    </div>
-
-    <div class="altitude-scale">
-      <div class="altitude-track" id="altTrack">
-        <svg id="altSvg" viewBox="0 0 1000 340" preserveAspectRatio="none"></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="destinations">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Featured regions</span>
-      <h2>Where the line leads</h2>
-      <p>A first cut of destinations for the hub — each card carries the real elevation and the one thing that region does better than anywhere else in the country.</p>
-    </div>
-    <div class="grid-3">
-      <article class="dest-card">
-        <div class="dest-art" style="background:linear-gradient(135deg,#3C5A45,#6b8f6f);"></div>
-        <div class="dest-body">
-          <span class="dest-elev">415M · TERAI LOWLANDS</span>
-          <h3>Chitwan National Park</h3>
-          <p>Dense sal forest and grassland home to one-horned rhinos and Bengal tigers — Nepal at its warmest and wildest.</p>
-        </div>
-      </article>
-      <article class="dest-card">
-        <div class="dest-art" style="background:linear-gradient(135deg,#2f6b8f,#7fb8d6);"></div>
-        <div class="dest-body">
-          <span class="dest-elev">827M · POKHARA VALLEY</span>
-          <h3>Pokhara &amp; Phewa Lake</h3>
-          <p>The gateway to the Annapurnas — paragliding over the lake with a full range of 7,000m peaks on the skyline.</p>
-        </div>
-      </article>
-      <article class="dest-card">
-        <div class="dest-art" style="background:linear-gradient(135deg,#B23A32,#d97a63);"></div>
-        <div class="dest-body">
-          <span class="dest-elev">1,400M · KATHMANDU VALLEY</span>
-          <h3>Kathmandu &amp; Bhaktapur</h3>
-          <p>Three medieval durbar squares, living Newari courtyards, and the densest concentration of UNESCO sites in the country.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<section class="features" id="features">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Smart tools</span>
-      <h2>Plan around altitude, weather, and season</h2>
-      <p>The tools this hub is built around — not just a list of places, but the logistics that actually change a Nepal trip.</p>
-    </div>
-    <div class="grid-4">
-      <div class="feat-card">
-        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M3 17L9 9L13 14L21 4" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="21" cy="4" r="1.6" fill="currentColor" stroke="none"/>
-        </svg>
-        <h3>Itinerary builder</h3>
-        <p>Drag regions onto a timeline and the route reorders itself by elevation, so you never climb 4,000m in a day by accident.</p>
-      </div>
-      <div class="feat-card">
-        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M6 15a4 4 0 0 1 .7-7.94A5 5 0 0 1 16 8a3.5 3.5 0 0 1 1 6.9" stroke-linecap="round"/>
-          <path d="M8 19h.01M12 19h.01M16 19h.01" stroke-linecap="round"/>
-        </svg>
-        <h3>Live trail conditions</h3>
-        <p>Weather and pass status for trekking routes above 3,000m, pulled in daily during high season.</p>
-      </div>
-      <div class="feat-card">
-        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <rect x="4" y="5" width="16" height="16" rx="1.5"/>
-          <path d="M4 10h16M8 3v4M16 3v4" stroke-linecap="round"/>
-        </svg>
-        <h3>Cultural calendar</h3>
-        <p>Festival dates like Dashain, Tihar, and Holi mapped against each region so travel plans don't collide with closures.</p>
-      </div>
-      <div class="feat-card">
-        <svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-          <path d="M4 4v16h16" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M7 15l3-4 3 3 4-6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <h3>Traveler reports</h3>
-        <p>Short, dated notes from other visitors on trail difficulty, road conditions, and altitude sickness at each stop.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="culture" id="culture">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Beyond the mountains</span>
-      <h2>What's happening on the ground</h2>
-      <p>Nepal's culture shifts as fast as its elevation does — four things worth timing a trip around.</p>
-    </div>
-  </div>
-  <div class="culture-grid">
-    <div class="culture-item">
-      <span class="eyebrow">Sept–Oct</span>
-      <h3>Dashain</h3>
-      <p>The longest and most significant festival, marked by family gatherings and kite-filled skies over the valley.</p>
-    </div>
-    <div class="culture-item">
-      <span class="eyebrow">Everyday</span>
-      <h3>Newari cuisine</h3>
-      <p>Yomari, choila, and bara — Kathmandu Valley food traditions with their own festival calendar.</p>
-    </div>
-    <div class="culture-item">
-      <span class="eyebrow">March</span>
-      <h3>Holi</h3>
-      <p>Color-throwing celebrations that start a week early in the hills and peak on the same day nationwide.</p>
-    </div>
-    <div class="culture-item">
-      <span class="eyebrow">Year-round</span>
-      <h3>Living heritage</h3>
-      <p>Pottery Square, woodcarving workshops, and thangka painting studios still active in daily Kathmandu life.</p>
-    </div>
-  </div>
-</section>
-
-<section class="cta" id="about">
-  <div class="wrap">
-    <div class="cta-box">
-      <h2>Building this out for Nepal.</h2>
-      <p>This is the current front-end scope for our Smart Tourism Hub coursework project — static today, with itinerary and account features planned for later semesters.</p>
-      <div class="hero-ctas">
-        <a href="#top" class="btn btn-primary">Back to top</a>
-        <a href="https://github.com/asfaque33-glitch" class="btn btn-ghost">View the repo</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <a href="#top" class="logo">
-          <svg class="logo-mark" viewBox="0 0 26 26" fill="none">
-            <path d="M2 20L9 8L13 14L17 6L24 20H2Z" fill="#E0973D"/>
-            <circle cx="13" cy="4" r="2" fill="#F1E9D8"/>
-          </svg>
-          Nepal Smart Tourism Hub
-        </a>
-        <p>A student-built platform for planning Nepal trips by elevation, season, and season-specific culture.</p>
-      </div>
-      <div class="footer-cols">
-        <div class="footer-col">
-          <h4>Explore</h4>
-          <ul>
-            <li><a href="#altitude">Altitude line</a></li>
-            <li><a href="#destinations">Destinations</a></li>
-            <li><a href="#features">Smart tools</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Project</h4>
-          <ul>
-            <li><a href="#about">About</a></li>
-            <li><a href="https://github.com/asfaque33-glitch">GitHub</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Nepal Smart Tourism Hub — BCSIT Group Project, SAIM College</span>
-      <span>Built with HTML, CSS &amp; JS</span>
-    </div>
-  </div>
-</footer>
-
-<script>
-  const stops = [
-    { name:"Lumbini",        elev:150,  tag:"Terai lowlands" },
-    { name:"Chitwan",        elev:415,  tag:"Jungle & wildlife" },
-    { name:"Pokhara",        elev:827,  tag:"Lake & Annapurna gateway" },
-    { name:"Kathmandu",      elev:1400, tag:"Valley & heritage" },
-    { name:"Nagarkot",       elev:2175, tag:"Sunrise viewpoint" },
-    { name:"Everest Base Camp", elev:5364, tag:"High trekking" },
-    { name:"Everest Summit", elev:8849, tag:"Roof of the world" },
-  ];
-
-  const track = document.getElementById('altTrack');
-  const svg = document.getElementById('altSvg');
-  const maxElev = 9000;
-  const trackW = 1000, trackH = 340, padTop = 40, padBottom = 40;
-
-  function yFor(elev){
-    const usable = trackH - padTop - padBottom;
-    return trackH - padBottom - (elev / maxElev) * usable;
-  }
-
-  for (let g = 0; g <= maxElev; g += 2000){
-    const y = yFor(g);
-    const line = document.createElement('div');
-    line.className = 'alt-gridline';
-    line.style.top = (y / trackH * 100) + '%';
-    track.appendChild(line);
-
-    const label = document.createElement('div');
-    label.className = 'alt-gridlabel';
-    label.style.top = (y / trackH * 100) + '%';
-    label.textContent = g.toLocaleString() + 'm';
-    track.appendChild(label);
-  }
-
-  const xStep = trackW / (stops.length + 1);
-  const coords = stops.map((s, i) => {
-    const x = xStep * (i + 1);
-    const y = yFor(s.elev);
-    return { ...s, x, y };
-  });
-
-  const pathD = coords.map((c, i) => (i === 0 ? 'M' : 'L') + c.x + ',' + c.y).join(' ');
-  const pathEl = document.createElementNS('http://www.w3.org/2000/svg','path');
-  pathEl.setAttribute('d', pathD);
-  pathEl.setAttribute('fill','none');
-  pathEl.setAttribute('stroke','#E0973D');
-  pathEl.setAttribute('stroke-width','2');
-  pathEl.setAttribute('stroke-dasharray','2 8');
-  pathEl.setAttribute('stroke-linecap','round');
-  svg.setAttribute('viewBox', '0 0 ' + trackW + ' ' + trackH);
-  svg.appendChild(pathEl);
-
-  coords.forEach((c, i) => {
-    const point = document.createElement('div');
-    point.className = 'alt-point' + (i % 2 === 1 ? ' flip' : '');
-    point.style.left = (c.x / trackW * 100) + '%';
-    point.style.bottom = ((trackH - c.y) / trackH * 100) + '%';
-    point.innerHTML = `
-      <div class="alt-dot"></div>
-      <div class="alt-card">
-        <div class="alt-elev">${c.elev.toLocaleString()}m</div>
-        <div class="alt-name">${c.name}</div>
-        <div class="alt-tag">${c.tag}</div>
-      </div>
-    `;
-    track.appendChild(point);
-  });
-
-  const baseline = document.createElement('div');
-  baseline.className = 'alt-baseline';
-  track.appendChild(baseline);
-</script>
+  <a href="#altitude" class="hero__scroll-cue" aria-label="Scroll to explore">
+    <span class="hero__scroll-line"></span>
+    <span>Scroll</span>
+  </a>
 
 </body>
 </html>
