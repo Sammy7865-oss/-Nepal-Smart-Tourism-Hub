@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nepal Smart Tourism Hub — Plan Nepal by Altitude</title>
+<meta name="description" content="Discover Nepal through elevation — from the subtropical Terai to the summit of Everest. Smart trip planning, curated journeys, and real altitude data for every traveler.">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============================================= -->
+<!-- PRELOADER / ELEVATION MARKER CURSOR (optional) -->
+<!-- ============================================= -->
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- ============================================= -->
+<!-- NAVIGATION                                     -->
+<!-- ============================================= -->
+<header class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="#home" class="nav__brand">
+      <span class="nav__brand-mark">NSTH</span>
+      <span class="nav__brand-text">Nepal Smart<br>Tourism Hub</span>
+    </a>
+
+    <nav class="nav__links" id="navLinks">
+      <a href="#altitude" class="nav__link" data-nav>Altitude</a>
+      <a href="#destinations" class="nav__link" data-nav>Destinations</a>
+      <a href="#packages" class="nav__link" data-nav>Packages</a>
+      <a href="#planner" class="nav__link" data-nav>Planner</a>
+      <a href="#culture" class="nav__link" data-nav>Culture</a>
+      <a href="#gallery" class="nav__link" data-nav>Gallery</a>
+    </nav>
+
+    <div class="nav__cta">
+      <a href="#booking" class="btn btn--small btn--amber">Start Planning</a>
+    </div>
+
+    <button class="nav__toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav__mobile" id="navMobile">
+    <a href="#altitude" data-nav>Altitude</a>
+    <a href="#destinations" data-nav>Destinations</a>
+    <a href="#packages" data-nav>Packages</a>
+    <a href="#planner" data-nav>Planner</a>
+    <a href="#culture" data-nav>Culture</a>
+    <a href="#gallery" data-nav>Gallery</a>
+    <a href="#booking" data-nav>Plan My Trip</a>
+  </div>
+</header>
+
+<!-- ============================================= -->
+<!-- HERO                                           -->
+<!-- ============================================= -->
+<section class="hero" id="home">
+  <div class="hero__bg">
+    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=2000&q=80" alt="Sunrise over the Himalayan peaks of Nepal" loading="eager">
+    <div class="hero__scrim"></div>
+    <div class="hero__altitude-gradient" aria-hidden="true"></div>
+  </div>
+
+  <div class="hero__content">
+    <p class="eyebrow eyebrow--light" data-reveal>
+      <span class="eyebrow__line"></span> 8,848M TO 60M ABOVE SEA LEVEL
+    </p>
+    <h1 class="hero__title" data-reveal>
+      Plan Nepal<br>
+      <span class="hero__title-accent">by Altitude</span>
+    </h1>
+    <p class="hero__type" id="heroTyping" data-reveal></p>
+    <p class="hero__sub" data-reveal>
+      One country, every elevation. From subtropical jungle at 60 metres to the roof of the world at 8,848 — choose your altitude, and we'll show you the Nepal that lives there.
+    </p>
+    <div class="hero__actions" data-reveal>
+      <a href="#altitude" class="btn btn--amber btn--ripple">Explore the Altitude Line</a>
+      <a href="#planner" class="btn btn--ghost-light btn--ripple">Try the Smart Planner</a>
+    </div>
+  </div>
+
+  <a href="#altitude" class="hero__scroll-cue" aria-label="Scroll to explore">
+    <span class="hero__scroll-line"></span>
+    <span>Scroll</span>
+  </a>
+</section>
+
+<!-- ============================================= -->
+<!-- ALTITUDE JOURNEY TIMELINE                      -->
+<!-- ============================================= -->
+<section class="altitude" id="altitude">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> The Altitude Line</p>
+    <h2 class="section__title" data-reveal>Every metre tells a different story</h2>
+    <p class="section__desc" data-reveal>Nepal rises nearly nine kilometres between its southern plains and its northern summits — few countries on earth compress so much climate, culture, and terrain into one line. Drag or scroll to travel it.</p>
+  </div>
+
+  <div class="altitude__timeline" id="altitudeTimeline">
+    <div class="altitude__track" aria-hidden="true">
+      <div class="altitude__track-fill" id="altitudeFill"></div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="8848" style="--stop-pos: 2%;">
+      <button class="altitude__marker" data-target="stop-everest" aria-label="Everest, 8848 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">8,848M</span>
+        <span class="altitude__label-name">Everest Region</span>
+      </div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="5364" style="--stop-pos: 20%;">
+      <button class="altitude__marker" data-target="stop-basecamp" aria-label="Everest Base Camp, 5364 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">5,364M</span>
+        <span class="altitude__label-name">Base Camp</span>
+      </div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="3800" style="--stop-pos: 38%;">
+      <button class="altitude__marker" data-target="stop-annapurna" aria-label="Annapurna, 3800 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">3,800M</span>
+        <span class="altitude__label-name">Annapurna</span>
+      </div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="1400" style="--stop-pos: 58%;">
+      <button class="altitude__marker" data-target="stop-pokhara" aria-label="Pokhara, 1400 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">1,400M</span>
+        <span class="altitude__label-name">Pokhara Valley</span>
+      </div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="1350" style="--stop-pos: 76%;">
+      <button class="altitude__marker" data-target="stop-kathmandu" aria-label="Kathmandu, 1350 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">1,350M</span>
+        <span class="altitude__label-name">Kathmandu</span>
+      </div>
+    </div>
+
+    <div class="altitude__stop" data-elevation="60" style="--stop-pos: 96%;">
+      <button class="altitude__marker" data-target="stop-chitwan" aria-label="Chitwan, 60 metres"></button>
+      <div class="altitude__label">
+        <span class="altitude__label-elev">60M</span>
+        <span class="altitude__label-name">Chitwan Terai</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="altitude__detail" id="altitudeDetail">
+    <div class="altitude__detail-card" id="stop-everest">
+      <span class="altitude__detail-eyebrow">Sagarmatha Zone</span>
+      <h3>Everest Region</h3>
+      <p>Thin air, prayer flags snapping in the wind, and the highest point on the planet. Home to Sherpa culture and the world's most storied trekking route.</p>
+      <div class="altitude__detail-tags"><span>Extreme Altitude</span><span>Trekking</span><span>−15° to 5°C</span></div>
+    </div>
+    <div class="altitude__detail-card" id="stop-basecamp">
+      <span class="altitude__detail-eyebrow">Khumbu Glacier</span>
+      <h3>Everest Base Camp</h3>
+      <p>The staging ground for summit attempts, ringed by six of the world's fourteen 8,000-metre peaks. A pilgrimage for trekkers, not just climbers.</p>
+      <div class="altitude__detail-tags"><span>High Altitude</span><span>12-Day Trek</span><span>−10° to 10°C</span></div>
+    </div>
+    <div class="altitude__detail-card" id="stop-annapurna">
+      <span class="altitude__detail-eyebrow">Annapurna Conservation Area</span>
+      <h3>Annapurna Sanctuary</h3>
+      <p>A natural amphitheatre of peaks above 7,000 metres, reached through rhododendron forest and terraced Gurung villages.</p>
+      <div class="altitude__detail-tags"><span>High Altitude</span><span>Moderate Trek</span><span>−5° to 15°C</span></div>
+    </div>
+    <div class="altitude__detail-card" id="stop-pokhara">
+      <span class="altitude__detail-eyebrow">Gandaki Province</span>
+      <h3>Pokhara Valley</h3>
+      <p>A lakeside city facing the Annapurna range, where paragliders drift above turquoise water — Nepal's adventure capital.</p>
+      <div class="altitude__detail-tags"><span>Mid Altitude</span><span>Adventure Hub</span><span>10° to 28°C</span></div>
+    </div>
+    <div class="altitude__detail-card" id="stop-kathmandu">
+      <span class="altitude__detail-eyebrow">Kathmandu Valley</span>
+      <h3>Kathmandu</h3>
+      <p>Three ancient royal cities, seven UNESCO sites, and a living rhythm of temple bells and street kitchens in one dense valley.</p>
+      <div class="altitude__detail-tags"><span>Mid Altitude</span><span>Culture</span><span>8° to 30°C</span></div>
+    </div>
+    <div class="altitude__detail-card" id="stop-chitwan">
+      <span class="altitude__detail-eyebrow">Terai Lowlands</span>
+      <h3>Chitwan Terai</h3>
+      <p>Subtropical jungle along the Indian border — rhinos, elephants, and Nepal's warmest, most humid climate.</p>
+      <div class="altitude__detail-tags"><span>Lowland</span><span>Wildlife</span><span>15° to 35°C</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- FEATURED DESTINATIONS                          -->
+<!-- ============================================= -->
+<section class="destinations" id="destinations">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Featured Destinations</p>
+    <h2 class="section__title" data-reveal>Six places, six elevations</h2>
+    <p class="section__desc" data-reveal>Hand-picked to show the range of Nepal — pick a card, not just a place.</p>
+  </div>
+
+  <div class="destinations__grid">
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1516481352849-4abd0a469f04?auto=format&fit=crop&w=1000&q=80" alt="Everest Base Camp trail with prayer flags" loading="lazy">
+        <span class="dest-card__elev">5,364M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Everest Base Camp</h3>
+        <p>Twelve days through Sherpa villages to stand beneath the world's highest mountain.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&w=1000&q=80" alt="Annapurna Sanctuary mountain range" loading="lazy">
+        <span class="dest-card__elev">3,800M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Annapurna Sanctuary</h3>
+        <p>A natural bowl of ice giants reached through rhododendron forest.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1553856622-abc4c9b53c99?auto=format&fit=crop&w=1000&q=80" alt="Phewa Lake in Pokhara with mountain backdrop" loading="lazy">
+        <span class="dest-card__elev">1,400M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Pokhara &amp; Phewa Lake</h3>
+        <p>Paragliding, boating, and Annapurna views from a lakeside café table.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=1000&q=80" alt="Kathmandu Durbar Square temples" loading="lazy">
+        <span class="dest-card__elev">1,350M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Kathmandu Durbar Square</h3>
+        <p>Pagoda temples, palace courtyards, and centuries of Newari craftsmanship.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1585504198199-20277593b94f?auto=format&fit=crop&w=1000&q=80" alt="Bhaktapur ancient pottery square" loading="lazy">
+        <span class="dest-card__elev">1,401M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Bhaktapur</h3>
+        <p>The best-preserved medieval city in the valley, still fired by potters' wheels.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+    <article class="dest-card" data-reveal>
+      <div class="dest-card__image">
+        <img src="https://images.unsplash.com/photo-1602847351516-6e4c999de2c9?auto=format&fit=crop&w=1000&q=80" alt="One-horned rhino in Chitwan National Park" loading="lazy">
+        <span class="dest-card__elev">60M</span>
+      </div>
+      <div class="dest-card__body">
+        <h3>Chitwan National Park</h3>
+        <p>Jungle safari for one-horned rhinos, deep in Nepal's subtropical Terai.</p>
+        <a href="#booking" class="dest-card__link">Explore <span>→</span></a>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- TOUR PACKAGES                                  -->
+<!-- ============================================= -->
+<section class="packages" id="packages">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Popular Packages</p>
+    <h2 class="section__title" data-reveal>Five ways to travel Nepal</h2>
+    <p class="section__desc" data-reveal>Every package is built around an elevation profile, not just a destination list.</p>
+  </div>
+
+  <div class="packages__grid">
+
+    <article class="pkg-card" data-reveal>
+      <div class="pkg-card__image">
+        <img src="https://images.unsplash.com/photo-1571401835393-8c5f35328320?auto=format&fit=crop&w=900&q=80" alt="Luxury mountain lodge in Nepal" loading="lazy">
+        <span class="pkg-card__badge">Luxury</span>
+      </div>
+      <div class="pkg-card__body">
+        <div class="pkg-card__rating"><span class="stars">★★★★★</span> 4.9 <span class="pkg-card__reviews">(112)</span></div>
+        <h3>Himalayan Luxury Retreat</h3>
+        <div class="pkg-card__meta">
+          <span>🕐 6 Days</span>
+          <span>⛰ Easy</span>
+          <span>👥 2–8 People</span>
+        </div>
+        <ul class="pkg-card__highlights">
+          <li>Private helicopter mountain flight</li>
+          <li>5-star heritage hotel stays</li>
+          <li>Personal Sherpa concierge</li>
+        </ul>
+        <div class="pkg-card__footer">
+          <div class="pkg-card__price"><span>From</span> $2,450</div>
+          <a href="#booking" class="btn btn--small btn--outline">Enquire</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="pkg-card" data-reveal>
+      <div class="pkg-card__image">
+        <img src="https://images.unsplash.com/photo-1516750208969-5b1b28b8f2ec?auto=format&fit=crop&w=900&q=80" alt="Trekkers on Annapurna adventure trail" loading="lazy">
+        <span class="pkg-card__badge pkg-card__badge--amber">Adventure</span>
+      </div>
+      <div class="pkg-card__body">
+        <div class="pkg-card__rating"><span class="stars">★★★★★</span> 4.8 <span class="pkg-card__reviews">(286)</span></div>
+        <h3>Annapurna Circuit Trek</h3>
+        <div class="pkg-card__meta">
+          <span>🕐 14 Days</span>
+          <span>⛰ Challenging</span>
+          <span>👥 4–12 People</span>
+        </div>
+        <ul class="pkg-card__highlights">
+          <li>Thorong La Pass crossing (5,416m)</li>
+          <li>Tea-house village stays</li>
+          <li>Licensed trekking guide &amp; porter</li>
+        </ul>
+        <div class="pkg-card__footer">
+          <div class="pkg-card__price"><span>From</span> $980</div>
+          <a href="#booking" class="btn btn--small btn--outline">Enquire</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="pkg-card" data-reveal>
+      <div class="pkg-card__image">
+        <img src="https://images.unsplash.com/photo-1535338454770-8be927b5a00b?auto=format&fit=crop&w=900&q=80" alt="Bengal tiger in Nepal wildlife safari" loading="lazy">
+        <span class="pkg-card__badge pkg-card__badge--pine">Wildlife</span>
+      </div>
+      <div class="pkg-card__body">
+        <div class="pkg-card__rating"><span class="stars">★★★★☆</span> 4.6 <span class="pkg-card__reviews">(94)</span></div>
+        <h3>Chitwan Jungle Safari</h3>
+        <div class="pkg-card__meta">
+          <span>🕐 3 Days</span>
+          <span>⛰ Easy</span>
+          <span>👥 2–10 People</span>
+        </div>
+        <ul class="pkg-card__highlights">
+          <li>Jeep &amp; canoe safari</li>
+          <li>Tharu cultural village visit</li>
+          <li>Riverside jungle lodge</li>
+        </ul>
+        <div class="pkg-card__footer">
+          <div class="pkg-card__price"><span>From</span> $410</div>
+          <a href="#booking" class="btn btn--small btn--outline">Enquire</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="pkg-card" data-reveal>
+      <div class="pkg-card__image">
+        <img src="https://images.unsplash.com/photo-1606298855672-3efb63017be8?auto=format&fit=crop&w=900&q=80" alt="Buddhist stupa pilgrimage site in Nepal" loading="lazy">
+        <span class="pkg-card__badge pkg-card__badge--red">Pilgrimage</span>
+      </div>
+      <div class="pkg-card__body">
+        <div class="pkg-card__rating"><span class="stars">★★★★★</span> 4.9 <span class="pkg-card__reviews">(151)</span></div>
+        <h3>Muktinath &amp; Lumbini Trail</h3>
+        <div class="pkg-card__meta">
+          <span>🕐 8 Days</span>
+          <span>⛰ Moderate</span>
+          <span>👥 1–15 People</span>
+        </div>
+        <ul class="pkg-card__highlights">
+          <li>Muktinath temple at 3,710m</li>
+          <li>Buddha's birthplace, Lumbini</li>
+          <li>Monastery stays &amp; blessings</li>
+        </ul>
+        <div class="pkg-card__footer">
+          <div class="pkg-card__price"><span>From</span> $720</div>
+          <a href="#booking" class="btn btn--small btn--outline">Enquire</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="pkg-card" data-reveal>
+      <div class="pkg-card__image">
+        <img src="https://images.unsplash.com/photo-1626621331169-5f34be280ed6?auto=format&fit=crop&w=900&q=80" alt="Family friendly Nepal cultural tour" loading="lazy">
+        <span class="pkg-card__badge pkg-card__badge--gold">Family</span>
+      </div>
+      <div class="pkg-card__body">
+        <div class="pkg-card__rating"><span class="stars">★★★★★</span> 4.7 <span class="pkg-card__reviews">(203)</span></div>
+        <h3>Kathmandu Valley Discovery</h3>
+        <div class="pkg-card__meta">
+          <span>🕐 5 Days</span>
+          <span>⛰ Easy</span>
+          <span>👥 2–20 People</span>
+        </div>
+        <ul class="pkg-card__highlights">
+          <li>Three durbar squares in one trip</li>
+          <li>Kid-friendly pacing &amp; stops</li>
+          <li>Local food-tasting walk</li>
+        </ul>
+        <div class="pkg-card__footer">
+          <div class="pkg-card__price"><span>From</span> $560</div>
+          <a href="#booking" class="btn btn--small btn--outline">Enquire</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- WHY CHOOSE US / STATS                          -->
+<!-- ============================================= -->
+<section class="why" id="why">
+  <div class="why__grid">
+    <div class="why__intro">
+      <p class="eyebrow eyebrow--light" data-reveal><span class="eyebrow__line"></span> Why Choose Us</p>
+      <h2 class="section__title section__title--light" data-reveal>Built by people who read the terrain, not just the map</h2>
+      <p class="section__desc section__desc--light" data-reveal>Every itinerary is checked against real elevation, weather, and trail data before it reaches you.</p>
+    </div>
+
+    <div class="why__stats">
+      <div class="stat" data-reveal>
+        <span class="stat__number" data-count="8848">0</span>
+        <span class="stat__label">Metres of elevation range covered</span>
+      </div>
+      <div class="stat" data-reveal>
+        <span class="stat__number" data-count="120">0</span>
+        <span class="stat__label">Curated routes across Nepal</span>
+      </div>
+      <div class="stat" data-reveal>
+        <span class="stat__number" data-count="15400">0</span>
+        <span class="stat__label">Travelers guided since launch</span>
+      </div>
+      <div class="stat" data-reveal>
+        <span class="stat__number" data-count="98">0</span>
+        <span class="stat__label">Percent traveler satisfaction</span>
+      </div>
+    </div>
+
+    <div class="why__features">
+      <div class="feature-card" data-reveal>
+        <span class="feature-card__icon">🧭</span>
+        <h3>Elevation-Aware Planning</h3>
+        <p>Every route factors altitude sickness risk, acclimatisation days, and terrain difficulty.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <span class="feature-card__icon">🌦</span>
+        <h3>Live Season Guidance</h3>
+        <p>We match your travel window to the season each region is actually best in.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <span class="feature-card__icon">🪪</span>
+        <h3>Licensed Local Guides</h3>
+        <p>Government-registered guides and porters, sourced from the communities you visit.</p>
+      </div>
+      <div class="feature-card" data-reveal>
+        <span class="feature-card__icon">🤝</span>
+        <h3>Community-First Tourism</h3>
+        <p>A share of every booking supports trailside villages and conservation areas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- SMART PLANNER                                  -->
+<!-- ============================================= -->
+<section class="planner" id="planner">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Smart Planner</p>
+    <h2 class="section__title" data-reveal>Tell us the altitude. We'll tell you the rest.</h2>
+    <p class="section__desc" data-reveal>Pick a region and season to see weather, difficulty, and what to pack — instantly.</p>
+  </div>
+
+  <div class="planner__panel" data-reveal>
+    <div class="planner__controls">
+      <label class="planner__field">
+        <span>Region</span>
+        <select id="plannerRegion">
+          <option value="everest">Everest Region (3,440–5,364m)</option>
+          <option value="annapurna">Annapurna Region (800–4,130m)</option>
+          <option value="pokhara">Pokhara Valley (822–1,740m)</option>
+          <option value="kathmandu">Kathmandu Valley (1,300–2,732m)</option>
+          <option value="chitwan">Chitwan Terai (100–815m)</option>
+        </select>
+      </label>
+
+      <label class="planner__field">
+        <span>Travel Month</span>
+        <select id="plannerSeason">
+          <option value="spring">March – May</option>
+          <option value="summer">June – August</option>
+          <option value="autumn">September – November</option>
+          <option value="winter">December – February</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="planner__result" id="plannerResult">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- CULTURE                                        -->
+<!-- ============================================= -->
+<section class="culture" id="culture">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Culture</p>
+    <h2 class="section__title" data-reveal>The Nepal between the mountains</h2>
+    <p class="section__desc" data-reveal>Over 125 ethnic groups, 120+ languages, and a festival calendar that never really stops.</p>
+  </div>
+
+  <div class="culture__tabs" role="tablist">
+    <button class="culture__tab is-active" data-tab="festivals" role="tab" aria-selected="true">Festivals</button>
+    <button class="culture__tab" data-tab="food" role="tab" aria-selected="false">Foods</button>
+    <button class="culture__tab" data-tab="traditions" role="tab" aria-selected="false">Traditions</button>
+  </div>
+
+  <div class="culture__panels">
+
+    <div class="culture__panel is-active" id="panel-festivals" data-reveal>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1601758064135-c5f5b5b0e8e5?auto=format&fit=crop&w=700&q=80" alt="Dashain festival celebration in Nepal" loading="lazy">
+        <h4>Dashain</h4>
+        <p>Nepal's longest festival — fifteen days of family reunions, kite flying, and blessings from elders.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1604608672516-f1b9be5c65c1?auto=format&fit=crop&w=700&q=80" alt="Tihar festival of lights with oil lamps" loading="lazy">
+        <h4>Tihar</h4>
+        <p>The festival of lights, honouring crows, dogs, cows, and siblings across five distinct days.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1615715756055-6c0d6c1b8b7e?auto=format&fit=crop&w=700&q=80" alt="Holi color festival celebration" loading="lazy">
+        <h4>Holi</h4>
+        <p>The color festival — Kathmandu's streets erupt in powder pigment to welcome spring.</p>
+      </div>
+    </div>
+
+    <div class="culture__panel" id="panel-food" data-reveal>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=700&q=80" alt="Momo dumplings, a Nepali staple dish" loading="lazy">
+        <h4>Momo</h4>
+        <p>Steamed or fried dumplings filled with buffalo, chicken, or vegetables — Nepal's favourite street food.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?auto=format&fit=crop&w=700&q=80" alt="Dal bhat traditional Nepali meal" loading="lazy">
+        <h4>Dal Bhat</h4>
+        <p>Lentil soup, rice, and vegetable curry — the daily meal that powers every trek in the country.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=700&q=80" alt="Newari thali cuisine spread" loading="lazy">
+        <h4>Newari Khaja Set</h4>
+        <p>A Kathmandu Valley specialty thali of beaten rice, spiced potatoes, and buffalo delicacies.</p>
+      </div>
+    </div>
+
+    <div class="culture__panel" id="panel-traditions" data-reveal>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=700&q=80" alt="Prayer flags and Buddhist monastery tradition" loading="lazy">
+        <h4>Prayer Flags</h4>
+        <p>Five-colour flags carry mantras on the wind across every high pass and monastery roof.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1584556812952-905ffd0c611a?auto=format&fit=crop&w=700&q=80" alt="Traditional Newari architecture in Bhaktapur" loading="lazy">
+        <h4>Newari Craftsmanship</h4>
+        <p>Wood-carved windows and pagoda roofs, a building tradition unbroken for over a thousand years.</p>
+      </div>
+      <div class="culture__item">
+        <img src="https://images.unsplash.com/photo-1609948543331-77a0d1d67c9d?auto=format&fit=crop&w=700&q=80" alt="Sherpa mountain community tradition" loading="lazy">
+        <h4>Sherpa Hospitality</h4>
+        <p>High-altitude tea houses run by families who have hosted trekkers for generations.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- GALLERY                                        -->
+<!-- ============================================= -->
+<section class="gallery" id="gallery">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Gallery</p>
+    <h2 class="section__title" data-reveal>Nepal, in fragments</h2>
+  </div>
+
+  <div class="gallery__grid" id="galleryGrid">
+    <img src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80" alt="Himalayan sunrise" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1553856622-abc4c9b53c99?auto=format&fit=crop&w=800&q=80" alt="Pokhara lake view" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1605640840605-14ac1855827b?auto=format&fit=crop&w=800&q=80" alt="Kathmandu temple square" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1516481352849-4abd0a469f04?auto=format&fit=crop&w=800&q=80" alt="Everest trekking trail" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1602847351516-6e4c999de2c9?auto=format&fit=crop&w=800&q=80" alt="Chitwan wildlife" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1585504198199-20277593b94f?auto=format&fit=crop&w=800&q=80" alt="Bhaktapur old town" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1544552866-d3ed42536cfd?auto=format&fit=crop&w=800&q=80" alt="Annapurna mountain range" loading="lazy" data-lightbox>
+    <img src="https://images.unsplash.com/photo-1571401835393-8c5f35328320?auto=format&fit=crop&w=800&q=80" alt="Mountain lodge Nepal" loading="lazy" data-lightbox>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox__close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox__nav lightbox__nav--prev" id="lightboxPrev" aria-label="Previous">&#8249;</button>
+    <img src="" alt="" id="lightboxImg">
+    <button class="lightbox__nav lightbox__nav--next" id="lightboxNext" aria-label="Next">&#8250;</button>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- TESTIMONIALS                                   -->
+<!-- ============================================= -->
+<section class="testimonials" id="testimonials">
+  <div class="section__intro">
+    <p class="eyebrow" data-reveal><span class="eyebrow__line"></span> Traveler Stories</p>
+    <h2 class="section__title" data-reveal>What it's like to plan with us</h2>
+  </div>
+
+  <div class="testimonials__grid">
+    <article class="testi-card" data-reveal>
+      <div class="testi-card__stars">★★★★★</div>
+      <p>"The altitude planner talked me out of rushing my acclimatisation days — genuinely think it kept me safe on the way to Base Camp."</p>
+      <div class="testi-card__author">
+        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Traveler avatar" loading="lazy">
+        <div>
+          <strong>Maren Fischer</strong>
+          <span>Germany — EBC Trek</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="testi-card" data-reveal>
+      <div class="testi-card__stars">★★★★★</div>
+      <p>"Booked the family package for the Kathmandu Valley — the pacing was perfect for our nine-year-old, and the guide knew every alley."</p>
+      <div class="testi-card__author">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Traveler avatar" loading="lazy">
+        <div>
+          <strong>Aiden Cole</strong>
+          <span>Australia — Family Package</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="testi-card" data-reveal>
+      <div class="testi-card__stars">★★★★☆</div>
+      <p>"Chitwan safari was the most relaxed three days of our trip after two weeks of trekking. Great contrast, well timed."</p>
+      <div class="testi-card__author">
+        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?auto=format&fit=crop&w=100&q=80" alt="Traveler avatar" loading="lazy">
+        <div>
+          <strong>Sana Rahman</strong>
+          <span>Bangladesh — Wildlife Package</span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- BOOKING / INQUIRY                              -->
+<!-- ============================================= -->
+<section class="booking" id="booking">
+  <div class="booking__wrap">
+    <div class="booking__intro">
+      <p class="eyebrow eyebrow--light" data-reveal><span class="eyebrow__line"></span> Plan Your Trip</p>
+      <h2 class="section__title section__title--light" data-reveal>Tell us your altitude, dates, and style</h2>
+      <p class="section__desc section__desc--light" data-reveal>A trip specialist will reply within 24 hours with a route built around what you tell us here.</p>
+
+      <div class="booking__contact">
+        <div><span>📞</span> +977 1 4XXXXXX</div>
+        <div><span>✉️</span> plan@nepalsmarttourism.com</div>
+        <div><span>📍</span> Thamel, Kathmandu, Nepal</div>
+      </div>
+    </div>
+
+    <form class="booking__form" id="bookingForm" novalidate>
+      <div class="form__row">
+        <div class="form__group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" placeholder="Your full name" required>
+          <span class="form__error" data-error="fullName"></span>
+        </div>
+        <div class="form__group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="you@email.com" required>
+          <span class="form__error" data-error="email"></span>
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" placeholder="+ country code and number" required>
+          <span class="form__error" data-error="phone"></span>
+        </div>
+        <div class="form__group">
+          <label for="destination">Preferred Destination</label>
+          <select id="destination" name="destination" required>
+            <option value="">Select a destination</option>
+            <option value="everest">Everest Region</option>
+            <option value="annapurna">Annapurna Region</option>
+            <option value="pokhara">Pokhara Valley</option>
+            <option value="kathmandu">Kathmandu Valley</option>
+            <option value="chitwan">Chitwan Terai</option>
+            <option value="undecided">Not sure yet</option>
+          </select>
+          <span class="form__error" data-error="destination"></span>
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__group">
+          <label for="travelDate">Travel Date</label>
+          <input type="date" id="travelDate" name="travelDate" required>
+          <span class="form__error" data-error="travelDate"></span>
+        </div>
+        <div class="form__group">
+          <label for="travelers">Number of Travelers</label>
+          <input type="number" id="travelers" name="travelers" min="1" max="30" placeholder="e.g. 2" required>
+          <span class="form__error" data-error="travelers"></span>
+        </div>
+      </div>
+
+      <div class="form__row">
+        <div class="form__group">
+          <label for="budget">Estimated Budget (USD)</label>
+          <select id="budget" name="budget" required>
+            <option value="">Select a range</option>
+            <option value="under-500">Under $500</option>
+            <option value="500-1000">$500 – $1,000</option>
+            <option value="1000-2500">$1,000 – $2,500</option>
+            <option value="2500-plus">$2,500+</option>
+          </select>
+          <span class="form__error" data-error="budget"></span>
+        </div>
+        <div class="form__group">
+          <label for="travelStyle">Travel Style</label>
+          <select id="travelStyle" name="travelStyle" required>
+            <option value="">Select a style</option>
+            <option value="luxury">Luxury</option>
+            <option value="adventure">Adventure</option>
+            <option value="wildlife">Wildlife</option>
+            <option value="pilgrimage">Pilgrimage</option>
+            <option value="family">Family</option>
+          </select>
+          <span class="form__error" data-error="travelStyle"></span>
+        </div>
+      </div>
+
+      <div class="form__group">
+        <label for="requests">Special Requests</label>
+        <textarea id="requests" name="requests" rows="4" placeholder="Dietary needs, accessibility, altitude concerns, anything else we should know..."></textarea>
+      </div>
+
+      <button type="submit" class="btn btn--amber btn--large btn--ripple" id="bookingSubmit">Send My Trip Request</button>
+      <p class="form__success" id="formSuccess">Thank you — your request has been received. A trip specialist will be in touch within 24 hours.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============================================= -->
+<!-- FOOTER                                         -->
+<!-- ============================================= -->
+<footer class="footer">
+  <div class="footer__top">
+    <div class="footer__brand">
+      <span class="nav__brand-mark">NSTH</span>
+      <p>Nepal Smart Tourism Hub plans journeys by elevation — real terrain data behind every itinerary, from the Terai to the summit.</p>
+      <div class="footer__social">
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="YouTube">YT</a>
+        <a href="#" aria-label="X">X</a>
+      </div>
+    </div>
+
+    <div class="footer__col">
+      <h4>Quick Links</h4>
+      <a href="#altitude">Altitude Line</a>
+      <a href="#destinations">Destinations</a>
+      <a href="#packages">Packages</a>
+      <a href="#planner">Smart Planner</a>
+      <a href="#culture">Culture</a>
+    </div>
+
+    <div class="footer__col">
+      <h4>Company</h4>
+      <a href="#why">Why Choose Us</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Traveler Stories</a>
+      <a href="#booking">Plan a Trip</a>
+    </div>
+
+    <div class="footer__col footer__newsletter">
+      <h4>Altitude Dispatch</h4>
+      <p>Monthly trail conditions, season notes, and new routes. No noise.</p>
+      <form class="footer__newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="you@email.com" required aria-label="Email for newsletter">
+        <button type="submit" class="btn btn--small btn--amber">Join</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p>&copy; 2026 Nepal Smart Tourism Hub. All rights reserved.</p>
+    <p>Designed &amp; built for travelers who read the terrain.</p>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script src="script.js"></script>
+</body>
+</html>
