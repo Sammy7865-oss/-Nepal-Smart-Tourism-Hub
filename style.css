@@ -697,7 +697,11 @@ p { margin: 0; }
 .lightbox__nav { position: absolute; top: 50%; transform: translateY(-50%); font-size: 3rem; color: var(--paper); padding: 10px 20px; }
 .lightbox__nav--prev { left: 10px; }
 .lightbox__nav--next { right: 10px; }
+<<<<<<< HEAD
 .lightbox_nav:hover, .lightbox_close:hover { color: var(--amber); }
+=======
+.lightbox__nav:hover, .lightbox__close:hover { color: var(--amber); }
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
 
 /* -------------------------------------------------------------
    15. TESTIMONIALS
@@ -744,9 +748,15 @@ p { margin: 0; }
 .booking__form { background: var(--paper); border-radius: var(--radius-l); padding: clamp(24px, 4vw, 44px); }
 .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
 .form__group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+<<<<<<< HEAD
 .form_row .form_group { margin-bottom: 0; }
 .form__group label { font-size: 0.82rem; font-weight: 600; color: var(--night); }
 .form_group input, .formgroup select, .form_group textarea {
+=======
+.form__row .form__group { margin-bottom: 0; }
+.form__group label { font-size: 0.82rem; font-weight: 600; color: var(--night); }
+.form__group input, .form__group select, .form__group textarea {
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
   padding: 13px 16px;
   border-radius: var(--radius-s);
   border: 1.5px solid var(--line);
@@ -754,8 +764,13 @@ p { margin: 0; }
   color: var(--ink);
   transition: border-color var(--dur-s) var(--ease);
 }
+<<<<<<< HEAD
 .form_group input:focus, .formgroup select:focus, .form_group textarea:focus { border-color: var(--amber); }
 .form_group.has-error input, .form_group.has-error select { border-color: var(--prayer-red); }
+=======
+.form__group input:focus, .form__group select:focus, .form__group textarea:focus { border-color: var(--amber); }
+.form__group.has-error input, .form__group.has-error select { border-color: var(--prayer-red); }
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
 .form__error { font-size: 0.76rem; color: var(--prayer-red); min-height: 16px; }
 .form__group textarea { resize: vertical; }
 

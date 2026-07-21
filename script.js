@@ -31,7 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     navLinks.forEach((link) => {
+<<<<<<< HEAD
       link.classList.toggle('is-active', link.getAttribute('href') === #${current});
+=======
+      link.classList.toggle('is-active', link.getAttribute('href') === `#${current}`);
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
     });
   }
   window.addEventListener('scroll', setActiveLink, { passive: true });
@@ -243,7 +247,11 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
       <div class="planner__result-item">
         <h5>Pack For This</h5>
+<<<<<<< HEAD
         <ul>${data.packing.map((item) => <li>${item}</li>).join('')}</ul>
+=======
+        <ul>${data.packing.map((item) => `<li>${item}</li>`).join('')}</ul>
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
       </div>
       <div class="planner__result-item" style="grid-column: 1 / -1;">
         <h5>Suggested Route</h5>
@@ -274,7 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       culturePanels.forEach((panel) => {
+<<<<<<< HEAD
         panel.classList.toggle('is-active', panel.id === panel-${target});
+=======
+        panel.classList.toggle('is-active', panel.id === `panel-${target}`);
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
       });
     });
   });
@@ -349,7 +361,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!rule) return true;
     const result = rule(field.value);
     const group = field.closest('.form__group');
+<<<<<<< HEAD
     const errorEl = bookingForm.querySelector([data-error="${field.name}"]);
+=======
+    const errorEl = bookingForm.querySelector(`[data-error="${field.name}"]`);
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
 
     if (result === true) {
       group.classList.remove('has-error');
@@ -428,9 +444,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const ripple = document.createElement('span');
       const size = Math.max(rect.width, rect.height);
       ripple.className = 'ripple-el';
+<<<<<<< HEAD
       ripple.style.width = ripple.style.height = ${size}px;
       ripple.style.left = ${e.clientX - rect.left - size / 2}px;
       ripple.style.top = ${e.clientY - rect.top - size / 2}px;
+=======
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
+      ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
+>>>>>>> 1cdd0033a9d339bd3325d05ea982e682912a70e9
       this.appendChild(ripple);
       setTimeout(() => ripple.remove(), 650);
     });
