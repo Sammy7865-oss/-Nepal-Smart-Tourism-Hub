@@ -1,1214 +1,1009 @@
-<<<<<<< Updated upstream
-/* =============================================================
-   NEPAL SMART TOURISM HUB — SCRIPT
-   Vanilla JS only. No dependencies.
-   ============================================================= */
+/* =====================================================================
+   NEPAL SMART TOURISM HUB — SCRIPT.JS
+   Vanilla JavaScript only, no frameworks/dependencies.
 
-document.addEventListener('DOMContentLoaded', () => {
-
-  /* -----------------------------------------------------------
-     1. STICKY NAVBAR + SHRINK ON SCROLL + ACTIVE LINK
-     ----------------------------------------------------------- */
-  const nav = document.getElementById('mainNav');
-  const navLinks = document.querySelectorAll('[data-nav]');
-  const sections = document.querySelectorAll('section[id]');
-
-  function handleNavScroll() {
-    if (window.scrollY > 40) {
-      nav.classList.add('is-scrolled');
-    } else {
-      nav.classList.remove('is-scrolled');
-    }
-  }
-  handleNavScroll();
-  window.addEventListener('scroll', handleNavScroll, { passive: true });
-
-  function setActiveLink() {
-    let current = '';
-    const scrollPos = window.scrollY + 160;
-    sections.forEach((section) => {
-      if (scrollPos >= section.offsetTop) {
-        current = section.getAttribute('id');
-      }
-    });
-    navLinks.forEach((link) => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${current}`);
-    });
-  }
-  window.addEventListener('scroll', setActiveLink, { passive: true });
-  setActiveLink();
-
-  /* -----------------------------------------------------------
-     2. MOBILE MENU TOGGLE
-     ----------------------------------------------------------- */
-  const navToggle = document.getElementById('navToggle');
-  const navMobile = document.getElementById('navMobile');
-
-  navToggle.addEventListener('click', () => {
-    const isOpen = navMobile.classList.toggle('is-open');
-    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    document.body.style.overflow = isOpen ? 'hidden' : '';
-  });
-
-  navMobile.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      navMobile.classList.remove('is-open');
-      navToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
-    });
-  });
-
-  /* -----------------------------------------------------------
-     3. SMOOTH SCROLL (for browsers / offsets needing JS control)
-     ----------------------------------------------------------- */
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener('click', function (e) {
-      const targetId = this.getAttribute('href');
-      if (targetId.length <= 1) return;
-      const target = document.querySelector(targetId);
-      if (!target) return;
-      e.preventDefault();
-      const offset = 90;
-      const top = target.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
-    });
-  });
-
-  /* -----------------------------------------------------------
-     4. HERO TYPING EFFECT
-     ----------------------------------------------------------- */
-  const typingEl = document.getElementById('heroTyping');
-  const typingPhrases = [
-    'Sea-level jungle to 8,848 metres of ice.',
-    'Six ecological zones. One border.',
-    'Trek, pray, paddle, or paraglide — by elevation.'
-  ];
-=======
-/* ================================================================
-   NEPAL SMART TOURISM HUB — script.js
-   PRJ 181 — University Group Project
-   Vanilla JavaScript only. No frameworks/libraries.
-
-   Table of Contents:
-   1.  Trip Data (JSON-like object used across the app)
-   2.  Utility helpers
+   Table of Contents
+   1.  Data Sets (JSON-style objects)
+   2.  Utility Helpers
    3.  Sticky Navbar + Active Link Highlighting
-   4.  Mobile Menu
-   5.  Typing Effect (Hero)
-   6.  Scroll Reveal (Intersection Observer)
-   7.  Animated Counters
-   8.  Altitude Journey Timeline
-   9.  Smart Trip Planner
-   10. Gallery Lightbox
-   11. Testimonials Slider
-   12. FAQ Accordion
-   13. Booking Form Validation
-   14. Newsletter Form
-   15. Smooth Scroll / Back To Top
-   16. Ripple Button Effect
-   17. Fetch/AJAX Demo (simulated JSON endpoint)
-   18. Init
-================================================================ */
+   4.  Mobile Menu Toggle
+   5.  Hero Typing Effect
+   6.  Animated Counters (Intersection Observer)
+   7.  Altitude Timeline (render + interaction)
+   8.  Destinations Renderer
+   9.  Packages Renderer
+   10. Smart Trip Planner
+   11. Culture Renderer
+   12. Gallery + Lightbox
+   13. FAQ Accordion
+   14. Booking Form Validation + Success Popup
+   15. Newsletter Form (fetch/AJAX demo)
+   16. Scroll Reveal (Intersection Observer)
+   17. Smooth Scroll + Back To Top
+   18. Ripple Button Effect
+   19. Init
+===================================================================== */
 
-'use strict';
+(function () {
+  'use strict';
 
-/* ================================================================
-   1. TRIP DATA
-   Central JSON-style dataset driving the Smart Trip Planner and
-   the Altitude Journey Timeline detail cards.
-================================================================ */
-const TRIP_DATA = {
-  regions: {
-    everest: {
-      name: 'Everest Region',
-      weather: {
-        spring: '−5°C to 15°C, clear mornings, afternoon cloud build-up',
-        summer: '5°C to 18°C, frequent monsoon rain and low visibility',
-        autumn: '−8°C to 12°C, stable and the clearest skies of the year',
-        winter: '−15°C to 5°C, dry air, high passes may close with snow'
-      },
-      packingList: {
-        spring: ['Down jacket', 'Thermal base layers', 'Trekking poles', 'Sun hat + high-SPF sunscreen'],
-        summer: ['Waterproof shell', 'Quick-dry clothing', 'Leech socks', 'Dry bags for electronics'],
-        autumn: ['Down jacket', 'Insulated gloves', 'Sunglasses (UV400)', 'Sleeping bag rated to −15°C'],
-        winter: ['Heavyweight down jacket', 'Insulated boots', 'Balaclava', 'Sleeping bag rated to −20°C']
-      },
-      difficulty: 'Hard',
-      route: 'Lukla → Phakding → Namche Bazaar → Tengboche → Dingboche → Lobuche → Gorak Shep → Kala Patthar → Everest Base Camp'
+  /* ===================================================================
+     1. DATA SETS
+  =================================================================== */
+
+  /** Altitude journey timeline stops, ordered low -> high altitude. */
+  const JOURNEY_STOPS = [
+    {
+      id: 'chitwan',
+      name: 'Chitwan',
+      altitude: 150,
+      altitudeLabel: '150 m',
+      climate: 'Subtropical',
+      duration: '2–3 days',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Greater%20one-horned%20rhinoceros%20at%20Chitwan.jpg?width=800',
+      description: 'Nepal\'s lowland Terai belt — dense sal forest, wetlands and one of Asia\'s best places to spot a one-horned rhino on a jeep or canoe safari.'
     },
-    annapurna: {
-      name: 'Annapurna Region',
-      weather: {
-        spring: '5°C to 20°C, rhododendrons in bloom below 3,000m',
-        summer: '10°C to 24°C, monsoon showers, leeches on lower trails',
-        autumn: '2°C to 18°C, crisp and dry, best mountain visibility',
-        winter: '−10°C to 10°C, Thorong La pass may be snow-bound'
-      },
-      packingList: {
-        spring: ['Light down jacket', 'Rain shell', 'Trekking poles', 'Water purification tablets'],
-        summer: ['Waterproof poncho', 'Quick-dry layers', 'Anti-leech spray', 'Extra socks'],
-        autumn: ['Down jacket', 'Fleece mid-layer', 'Gloves', 'Sunglasses'],
-        winter: ['Heavy down jacket', 'Microspikes', 'Insulated gloves', 'Thermal sleeping bag']
-      },
-      difficulty: 'Moderate',
-      route: 'Besisahar → Chame → Pisang → Manang → Yak Kharka → Thorong Phedi → Thorong La Pass → Muktinath'
+    {
+      id: 'kathmandu',
+      name: 'Kathmandu',
+      altitude: 1400,
+      altitudeLabel: '1,400 m',
+      climate: 'Temperate',
+      duration: '2–4 days',
+      img: 'https://images.unsplash.com/photo-1558005530-a7958896ec60?w=900&q=80',
+      description: 'The cultural core of the valley — Durbar Squares, Boudhanath stupa and Swayambhunath, all within a short taxi ride of each other.'
     },
-    pokhara: {
-      name: 'Pokhara & Lakeside',
-      weather: {
-        spring: '14°C to 26°C, mild and mostly dry',
-        summer: '20°C to 30°C, heavy monsoon rainfall',
-        autumn: '13°C to 25°C, clear lake views of the Annapurnas',
-        winter: '5°C to 20°C, cool mornings, sunny afternoons'
-      },
-      packingList: {
-        spring: ['Light jacket', 'Sunglasses', 'Comfortable walking shoes', 'Reusable water bottle'],
-        summer: ['Rain jacket', 'Umbrella', 'Quick-dry clothing', 'Waterproof phone pouch'],
-        autumn: ['Light sweater', 'Camera gear', 'Sun hat', 'Day pack'],
-        winter: ['Warm layers for evenings', 'Light jacket', 'Sunglasses', 'Comfortable shoes']
-      },
-      difficulty: 'Easy',
-      route: 'Pokhara Lakeside → Sarangkot Sunrise Point → World Peace Pagoda → Phewa Lake Boating → Davis Falls'
+    {
+      id: 'pokhara',
+      name: 'Pokhara',
+      altitude: 820,
+      altitudeLabel: '820 m',
+      climate: 'Warm-temperate',
+      duration: '2–3 days',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Phewa%20lake%2C%20Pokhara.jpg?width=800',
+      description: 'A lakeside base with a straight-on view of the Annapurna range from the water — the launch point for most Annapurna treks.'
     },
-    kathmandu: {
-      name: 'Kathmandu Valley',
-      weather: {
-        spring: '15°C to 28°C, warm days, occasional showers',
-        summer: '20°C to 30°C, hot and humid with monsoon rain',
-        autumn: '12°C to 25°C, pleasant and festival season',
-        winter: '2°C to 18°C, cold mornings with heavy fog'
-      },
-      packingList: {
-        spring: ['Light cotton clothing', 'Walking shoes', 'Scarf for temple visits', 'Sunscreen'],
-        summer: ['Rain jacket', 'Breathable clothing', 'Umbrella', 'Sandals'],
-        autumn: ['Light layers', 'Comfortable shoes', 'Camera', 'Modest clothing for temples'],
-        winter: ['Warm jacket', 'Scarf and gloves', 'Closed shoes', 'Face mask for air quality']
-      },
-      difficulty: 'Easy',
-      route: 'Kathmandu Durbar Square → Swayambhunath Stupa → Boudhanath Stupa → Pashupatinath Temple → Patan Durbar Square'
+    {
+      id: 'annapurna',
+      name: 'Annapurna',
+      altitude: 4130,
+      altitudeLabel: '4,130 m',
+      climate: 'Alpine',
+      duration: '7–14 days',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Annapurna%20Range%20with%20Fishtail%20Mountain.JPG?width=800',
+      description: 'Terraced foothills give way to high alpine desert at Manang and the Thorong La pass — the most varied landscape trek in Nepal.'
     },
-    chitwan: {
-      name: 'Chitwan (Terai)',
-      weather: {
-        spring: '18°C to 34°C, hot and humid, good wildlife visibility',
-        summer: '24°C to 38°C, very hot with heavy monsoon',
-        autumn: '16°C to 30°C, comfortable with lush greenery',
-        winter: '8°C to 25°C, cool mornings, ideal safari season'
-      },
-      packingList: {
-        spring: ['Light cotton clothing', 'Insect repellent', 'Wide-brim hat', 'Binoculars'],
-        summer: ['Breathable clothing', 'Rain jacket', 'Insect repellent', 'Waterproof bag'],
-        autumn: ['Light layers', 'Neutral-coloured clothing', 'Binoculars', 'Camera'],
-        winter: ['Light jacket for mornings', 'Neutral clothing', 'Insect repellent', 'Binoculars']
-      },
-      difficulty: 'Easy',
-      route: 'Sauraha → Jeep Safari (Core Area) → Canoe Ride on Rapti River → Elephant Breeding Center → Tharu Cultural Show'
+    {
+      id: 'basecamp',
+      name: 'Base Camp',
+      altitude: 5364,
+      altitudeLabel: '5,364 m',
+      climate: 'High alpine',
+      duration: '12–14 days',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/KhumbuIcefall.jpg?width=800',
+      description: 'Everest Base Camp itself — glacial moraine, prayer flags, and your first close-up view of the Khumbu Icefall.'
+    },
+    {
+      id: 'everest',
+      name: 'Everest',
+      altitude: 8849,
+      altitudeLabel: '8,849 m',
+      climate: 'Extreme / summit zone',
+      duration: 'Expedition only',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Everest%20kalapatthar%20crop.jpg?width=800',
+      description: 'The summit of Sagarmatha — the highest point on Earth, reserved for permitted mountaineering expeditions with full oxygen support.'
     }
-  },
-
-  timelinePlaces: {
-    chitwan: {
-      title: 'Chitwan National Park',
-      elevation: '150m above sea level',
-      text: 'Nepal\'s lowland jungle, a UNESCO-listed refuge for one-horned rhinos, Bengal tigers and gharial crocodiles along the Rapti River.',
-      img: 'https://images.unsplash.com/photo-1585504198199-20277593b94f?w=900&q=80'
-    },
-    kathmandu: {
-      title: 'Kathmandu Valley',
-      elevation: '1,400m above sea level',
-      text: 'A bowl-shaped valley holding seven UNESCO World Heritage sites, from Durbar Squares to the stupas of Swayambhunath and Boudhanath.',
-      img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=900&q=80'
-    },
-    pokhara: {
-      title: 'Pokhara',
-      elevation: '822m above sea level',
-      text: 'A lakeside city facing the Annapurna range, serving as the trailhead for most central Himalaya treks and a paragliding hub.',
-      img: 'https://images.unsplash.com/photo-1602088113235-229c19758e9d?w=900&q=80'
-    },
-    annapurna: {
-      title: 'Annapurna Base Camp',
-      elevation: '4,130m above sea level',
-      text: 'A natural amphitheatre ringed by 7,000–8,000m peaks, reachable without technical climbing skills in under two weeks.',
-      img: 'https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=900&q=80'
-    },
-    basecamp: {
-      title: 'Everest Base Camp',
-      elevation: '5,364m above sea level',
-      text: 'The staging point for Everest expeditions, set on the Khumbu Glacier below the notorious icefall.',
-      img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80'
-    },
-    everest: {
-      title: 'Mount Everest (Sagarmatha)',
-      elevation: '8,849m above sea level',
-      text: 'The highest point on Earth, straddling the Nepal–Tibet border and known locally as Sagarmatha, "Forehead of the Sky".',
-      img: 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80'
-    }
-  }
-};
-
-/* ================================================================
-   2. UTILITY HELPERS
-================================================================ */
-const qs = (selector, scope = document) => scope.querySelector(selector);
-const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
-
-/** Simple debounce for scroll/resize-heavy handlers */
-function debounce(fn, delay = 100) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => fn(...args), delay);
-  };
-}
-
-/* ================================================================
-   3. STICKY NAVBAR + ACTIVE LINK HIGHLIGHTING
-================================================================ */
-function initStickyNav() {
-  const header = qs('#siteHeader');
-  const sections = qsa('main section[id]');
-  const navLinks = qsa('[data-nav-link]');
-
-  const onScroll = () => {
-    header.classList.toggle('is-scrolled', window.scrollY > 40);
-
-    let currentId = '';
-    const scrollPos = window.scrollY + 120;
-    sections.forEach((section) => {
-      if (scrollPos >= section.offsetTop) {
-        currentId = section.id;
-      }
-    });
-
-    navLinks.forEach((link) => {
-      link.classList.toggle('is-active', link.getAttribute('href') === `#${currentId}`);
-    });
-  };
-
-  window.addEventListener('scroll', debounce(onScroll, 30));
-  onScroll();
-}
-
-/* ================================================================
-   4. MOBILE MENU
-================================================================ */
-function initMobileMenu() {
-  const toggle = qs('#navToggle');
-  const links = qs('#navLinks');
-
-  toggle.addEventListener('click', () => {
-    const isOpen = links.classList.toggle('is-open');
-    toggle.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  // Close menu after a link is tapped (mobile UX)
-  qsa('[data-nav-link]', links).forEach((link) => {
-    link.addEventListener('click', () => {
-      links.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-  });
-}
-
-/* ================================================================
-   5. TYPING EFFECT (HERO HEADLINE)
-================================================================ */
-function initTypingEffect() {
-  const target = qs('#typingTarget');
-  const phrases = [
-    'Discover the Roof of the World.',
-    'Plan Treks with Confidence.',
-    'Travel Nepal, Intentionally.'
   ];
 
->>>>>>> Stashed changes
-  let phraseIndex = 0;
-  let charIndex = 0;
-  let isDeleting = false;
-
-<<<<<<< Updated upstream
-  function typeLoop() {
-    const currentPhrase = typingPhrases[phraseIndex];
-    if (!isDeleting) {
-      charIndex++;
-      typingEl.textContent = currentPhrase.slice(0, charIndex);
-      if (charIndex === currentPhrase.length) {
-        isDeleting = true;
-        setTimeout(typeLoop, 1800);
-        return;
-      }
-    } else {
-      charIndex--;
-      typingEl.textContent = currentPhrase.slice(0, charIndex);
-      if (charIndex === 0) {
-        isDeleting = false;
-        phraseIndex = (phraseIndex + 1) % typingPhrases.length;
-      }
+  /** Featured destination cards. */
+  const DESTINATIONS = [
+    {
+      name: 'Everest Region',
+      rating: '4.9',
+      desc: 'Sherpa villages, monasteries and the trail to the foot of the world\'s highest peak.',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Namche%20Bazaar%20Nepal.jpg?width=800'
+    },
+    {
+      name: 'Annapurna Circuit',
+      rating: '4.8',
+      desc: 'The classic trek — rice terraces to high desert in a single loop.',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Annapurna%20Range%20with%20Fishtail%20Mountain.JPG?width=800'
+    },
+    {
+      name: 'Pokhara',
+      rating: '4.7',
+      desc: 'Phewa Lake, paragliding, and sunrise views of the Annapurna range.',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Phewa%20lake%2C%20Pokhara.jpg?width=800'
+    },
+    {
+      name: 'Kathmandu Valley',
+      rating: '4.6',
+      desc: 'Seven UNESCO sites in one valley — palaces, stupas and temple courtyards.',
+      img: 'https://images.unsplash.com/photo-1558005530-a7958896ec60?w=800&q=80'
+    },
+    {
+      name: 'Chitwan National Park',
+      rating: '4.7',
+      desc: 'Jungle safari country — rhinos, gharial crocodiles and Tharu culture.',
+      img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Greater%20one-horned%20rhinoceros%20at%20Chitwan.jpg?width=800'
+    },
+    {
+      name: 'Upper Mustang',
+      rating: '4.9',
+      desc: 'A restricted-area desert kingdom behind the Annapurna rain shadow.',
+      img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=80'
     }
-    setTimeout(typeLoop, isDeleting ? 30 : 55);
-  }
-  if (typingEl) typeLoop();
+  ];
 
-  /* -----------------------------------------------------------
-     5. SCROLL REVEAL (Intersection Observer)
-     ----------------------------------------------------------- */
-  const revealEls = document.querySelectorAll('[data-reveal]');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
-  revealEls.forEach((el) => revealObserver.observe(el));
+  /** Tour packages. */
+  const PACKAGES = [
+    {
+      name: 'Everest Base Camp Trek',
+      desc: 'The bucket-list classic via Namche, Tengboche and Kala Patthar.',
+      price: 1450,
+      duration: '14 days',
+      difficulty: 'hard',
+      groupSize: '2–12',
+      featured: true
+    },
+    {
+      name: 'Annapurna Circuit',
+      desc: 'Full circuit over Thorong La with hot-spring stops at Tatopani.',
+      price: 1190,
+      duration: '12 days',
+      difficulty: 'moderate',
+      groupSize: '2–12'
+    },
+    {
+      name: 'Pokhara Lakeside Escape',
+      desc: 'Boating, paragliding and short hikes with mountain views.',
+      price: 490,
+      duration: '4 days',
+      difficulty: 'easy',
+      groupSize: '1–20'
+    },
+    {
+      name: 'Kathmandu Heritage Walk',
+      desc: 'Guided tour of Durbar Squares, Boudhanath and Pashupatinath.',
+      price: 260,
+      duration: '3 days',
+      difficulty: 'easy',
+      groupSize: '1–20'
+    },
+    {
+      name: 'Chitwan Jungle Safari',
+      desc: 'Canoe rides, jeep safari and a Tharu cultural evening.',
+      price: 380,
+      duration: '3 days',
+      difficulty: 'easy',
+      groupSize: '2–16'
+    },
+    {
+      name: 'Upper Mustang Expedition',
+      desc: 'Jeep and trekking route into the restricted trans-Himalayan desert.',
+      price: 1690,
+      duration: '10 days',
+      difficulty: 'hard',
+      groupSize: '2–8'
+    }
+  ];
 
-  /* -----------------------------------------------------------
-     6. ANIMATED COUNTERS
-     ----------------------------------------------------------- */
-  const counters = document.querySelectorAll('.stat__number');
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = parseInt(el.getAttribute('data-count'), 10);
-      const duration = 1600;
-      const start = performance.now();
-
-      function tick(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.floor(eased * target).toLocaleString();
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        } else {
-          el.textContent = target.toLocaleString();
-        }
-      }
-      requestAnimationFrame(tick);
-      counterObserver.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-  counters.forEach((counter) => counterObserver.observe(counter));
-
-  /* -----------------------------------------------------------
-     7. ALTITUDE TIMELINE INTERACTION
-     ----------------------------------------------------------- */
-  const altitudeMarkers = document.querySelectorAll('.altitude__marker');
-  const altitudeDetailCards = document.querySelectorAll('.altitude__detail-card');
-  const altitudeFill = document.getElementById('altitudeFill');
-  const altitudeTimeline = document.getElementById('altitudeTimeline');
-
-  function activateStop(targetId, fillPercent) {
-    altitudeDetailCards.forEach((card) => card.classList.toggle('is-active', card.id === targetId));
-    altitudeMarkers.forEach((marker) => marker.classList.toggle('is-active', marker.getAttribute('data-target') === targetId));
-    if (altitudeFill) altitudeFill.style.width = fillPercent + '%';
-  }
-
-  altitudeMarkers.forEach((marker) => {
-    const stopEl = marker.closest('.altitude__stop');
-    const posStr = stopEl.style.getPropertyValue('--stop-pos').replace('%', '');
-    marker.addEventListener('click', () => {
-      activateStop(marker.getAttribute('data-target'), parseFloat(posStr));
-    });
-  });
-
-  // Reveal the fill as the timeline scrolls into view, then default to first stop
-  const timelineObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        activateStop('stop-everest', 2);
-        timelineObserver.disconnect();
-      }
-    });
-  }, { threshold: 0.3 });
-  if (altitudeTimeline) timelineObserver.observe(altitudeTimeline);
-
-  /* -----------------------------------------------------------
-     8. SMART PLANNER
-     ----------------------------------------------------------- */
-  const plannerRegion = document.getElementById('plannerRegion');
-  const plannerSeason = document.getElementById('plannerSeason');
-  const plannerResult = document.getElementById('plannerResult');
-
-  const plannerData = {
+  /**
+   * Smart Trip Planner data set.
+   * Keyed by region -> season, holding weather / packing / route data.
+   * This stands in for a live weather API for the coursework demo.
+   */
+  const PLANNER_DATA = {
     everest: {
-      spring: { weather: '−5° to 12°C, clear mornings, afternoon cloud build-up.', season: 'Prime trekking season — best mountain visibility of the year.', difficulty: 'Challenging — high altitude, 12–14 day itinerary.', packing: ['Down jacket (−15°C rated)', 'Insulated trekking boots', 'Water purification tablets', 'Diamox (consult a doctor)'], route: 'Lukla → Namche → Tengboche → Dingboche → Base Camp, with 2 acclimatisation days.' },
-      summer: { weather: 'Monsoon rain below 4,000m, snow above. Poor visibility.', season: 'Not recommended — trails are wet, flights to Lukla often delayed.', difficulty: 'High risk — landslide and visibility concerns.', packing: ['Waterproof shell', 'Leech socks', 'Quick-dry layers'], route: 'Most operators pause EBC departures June–August.' },
-      autumn: { weather: '−2° to 15°C, the clearest skies of the year.', season: 'Peak season alongside spring — book 2–3 months ahead.', difficulty: 'Challenging — same profile as spring, busier trails.', packing: ['Down jacket', 'Trekking poles', 'Sun protection (UV is intense at altitude)'], route: 'Same route as spring; expect fuller tea houses.' },
-      winter: { weather: '−15° to 2°C, dry air, sub-zero nights.', season: 'Quiet season for experienced cold-weather trekkers.', difficulty: 'Severe — extreme cold, some passes may close.', packing: ['Expedition-grade sleeping bag', 'Four-season layers', 'Hand and foot warmers'], route: 'Shorter daylight hours mean earlier starts each day.' }
+      label: 'Everest Region',
+      route: 'Lukla → Phakding → Namche Bazaar → Tengboche → Dingboche → Everest Base Camp',
+      baseDifficulty: 'Hard',
+      seasons: {
+        spring: { weather: '5°C to 15°C, clear mornings, occasional afternoon cloud', packing: ['Down jacket', 'Trekking poles', 'UV sunglasses', 'Thermal base layers', 'Water purification tablets'] },
+        summer: { weather: '10°C to 18°C, monsoon rain and low visibility on passes', packing: ['Waterproof shell', 'Leech socks', 'Quick-dry clothing', 'Dry bags for electronics'] },
+        autumn: { weather: '2°C to 12°C, the clearest skies of the year', packing: ['Down jacket', 'Insulated gloves', 'Trekking poles', 'Headlamp', 'Sunscreen SPF 50'] },
+        winter: { weather: '-15°C to 5°C, snow above 4,000 m, very few trekkers', packing: ['Expedition-weight down jacket', 'Insulated boots', 'Balaclava', 'Sleeping bag rated to -20°C'] }
+      }
     },
     annapurna: {
-      spring: { weather: '8° to 20°C, rhododendrons in bloom.', season: 'One of the best times to trek — flowering forest trails.', difficulty: 'Moderate — passes above 5,000m need acclimatisation.', packing: ['Mid-weight fleece', 'Rain shell', 'Trekking poles'], route: 'Besisahar → Manang → Thorong La → Muktinath.' },
-      summer: { weather: 'Monsoon showers, humid lower valleys.', season: 'Quieter trails; upper Mustang stays in a rain shadow.', difficulty: 'Moderate, with wet-trail caution below 3,000m.', packing: ['Waterproof boots', 'Leech socks', 'Dry bags for electronics'], route: 'Consider the rain-shadow route via Jomsom instead.' },
-      autumn: { weather: '5° to 18°C, crisp and clear.', season: 'Peak season — the classic circuit at its best.', difficulty: 'Moderate — well-marked, tea houses fully open.', packing: ['Insulated jacket', 'Warm hat and gloves', 'Sunscreen (high UV at altitude)'], route: 'Full circuit or shorter Poon Hill loop, both in season.' },
-      winter: { weather: '−5° to 10°C, snow above 4,000m.', season: 'Thorong La Pass may close — check conditions before booking.', difficulty: 'Challenging in upper sections, easier on lower loops.', packing: ['Microspikes', 'Down layers', 'Extra insulated socks'], route: 'Poon Hill or lower Annapurna Sanctuary recommended.' }
+      label: 'Annapurna Region',
+      route: 'Besisahar → Chame → Manang → Thorong La Pass → Muktinath → Tatopani',
+      baseDifficulty: 'Moderate–Hard',
+      seasons: {
+        spring: { weather: '8°C to 20°C, rhododendrons in bloom below 3,000 m', packing: ['Light fleece', 'Trekking poles', 'Sun hat', 'Rain shell'] },
+        summer: { weather: '12°C to 22°C, wet on the southern side, drier past Manang', packing: ['Waterproof jacket', 'Umbrella', 'Quick-dry layers', 'Anti-leech spray'] },
+        autumn: { weather: '5°C to 18°C, peak season, stable weather', packing: ['Down vest', 'Trekking poles', 'Warm hat', 'Gloves for the pass'] },
+        winter: { weather: '-10°C to 8°C, Thorong La often snow-closed', packing: ['Heavy down jacket', 'Crampons (if pass open)', 'Insulated boots', 'Thermal layers'] }
+      }
     },
     pokhara: {
-      spring: { weather: '14° to 26°C, occasional light showers.', season: 'Excellent for paragliding and lake activities.', difficulty: 'Easy — city and lakeside terrain.', packing: ['Light layers', 'Sunglasses', 'Comfortable walking shoes'], route: 'Lakeside → World Peace Pagoda → Sarangkot sunrise point.' },
-      summer: { weather: '20° to 30°C, humid with monsoon rain.', season: 'Green landscapes but frequent afternoon downpours.', difficulty: 'Easy, plan indoor backups for rainy afternoons.', packing: ['Umbrella', 'Breathable clothing', 'Waterproof bag'], route: 'Museum and cafe circuit with lake boating between showers.' },
-      autumn: { weather: '15° to 27°C, clear Annapurna views.', season: 'Best season — mountain reflections on Phewa Lake.', difficulty: 'Easy.', packing: ['Light jacket for evenings', 'Camera gear', 'Sun hat'], route: 'Sarangkot sunrise, Davis Falls, lakeside paragliding.' },
-      winter: { weather: '5° to 20°C, cool mornings, mild days.', season: 'Comfortable and uncrowded.', difficulty: 'Easy.', packing: ['Light fleece', 'Layered clothing'], route: 'Same circuit, cooler and quieter.' }
+      label: 'Pokhara Valley',
+      route: 'Pokhara Lakeside → Sarangkot sunrise point → World Peace Pagoda → Begnas Lake',
+      baseDifficulty: 'Easy',
+      seasons: {
+        spring: { weather: '15°C to 27°C, warm and mostly dry', packing: ['Light cottons', 'Sun hat', 'Comfortable walking shoes'] },
+        summer: { weather: '20°C to 30°C, heavy monsoon rain', packing: ['Rain jacket', 'Quick-dry clothing', 'Waterproof bag cover'] },
+        autumn: { weather: '14°C to 26°C, clear mountain views most mornings', packing: ['Light jacket for evenings', 'Camera rain cover', 'Sunglasses'] },
+        winter: { weather: '6°C to 20°C, cool mornings, warm afternoons', packing: ['Light fleece', 'Layers for temperature swings'] }
+      }
     },
     kathmandu: {
-      spring: { weather: '12° to 25°C, mild and dry.', season: 'Comfortable temple-hopping weather.', difficulty: 'Easy — city walking.', packing: ['Modest clothing for temples', 'Comfortable shoes', 'Scarf for shoulders'], route: 'Durbar Square → Swayambhunath → Boudhanath → Patan.' },
-      summer: { weather: '20° to 30°C, humid with monsoon downpours.', season: 'Green valley views, plan around afternoon rain.', difficulty: 'Easy, with wet cobblestones underfoot.', packing: ['Compact umbrella', 'Quick-dry clothing'], route: 'Museum and indoor heritage sites during rain, temples in the morning.' },
-      autumn: { weather: '10° to 24°C, clear skies.', season: 'Festival season — Dashain and Tihar fall here.', difficulty: 'Easy.', packing: ['Layered outfit', 'Camera', 'Comfortable walking shoes'], route: 'Valley loop across Kathmandu, Patan, and Bhaktapur.' },
-      winter: { weather: '2° to 18°C, cold mornings.', season: 'Clear air, fewer crowds at heritage sites.', difficulty: 'Easy.', packing: ['Warm jacket for mornings', 'Layers for warm afternoons'], route: 'Same valley loop, best visited midday for warmth.' }
+      label: 'Kathmandu Valley',
+      route: 'Kathmandu Durbar Square → Swayambhunath → Boudhanath → Patan → Bhaktapur',
+      baseDifficulty: 'Easy',
+      seasons: {
+        spring: { weather: '12°C to 25°C, mild and pleasant', packing: ['Light layers', 'Comfortable shoes', 'Modest clothing for temples'] },
+        summer: { weather: '20°C to 29°C, humid with daily showers', packing: ['Umbrella', 'Breathable fabrics', 'Sandals for wet streets'] },
+        autumn: { weather: '10°C to 24°C, festival season (Dashain, Tihar)', packing: ['Light jacket for evenings', 'Comfortable walking shoes'] },
+        winter: { weather: '2°C to 18°C, cold mornings, smoggy air some days', packing: ['Warm layers', 'Scarf', 'Face mask for air quality'] }
+      }
     },
     chitwan: {
-      spring: { weather: '20° to 32°C, warm and dry.', season: 'Good wildlife visibility as grass is shorter.', difficulty: 'Easy.', packing: ['Neutral-coloured clothing', 'Insect repellent', 'Sun hat'], route: 'Jeep safari, canoe ride, Tharu village walk.' },
-      summer: { weather: '25° to 38°C, humid monsoon heat.', season: 'Hot and wet — some park areas may close for flooding.', difficulty: 'Easy but physically taxing in heat.', packing: ['Light breathable clothing', 'Rehydration salts', 'Waterproof bag'], route: 'Confirm park access before booking during peak monsoon.' },
-      autumn: { weather: '18° to 30°C, pleasant and dry.', season: 'Excellent season — clear skies, active wildlife.', difficulty: 'Easy.', packing: ['Light layers', 'Binoculars', 'Camera with zoom lens'], route: 'Full-day jeep safari plus sunset canoe ride.' },
-      winter: { weather: '10° to 25°C, cool mornings, warm afternoons.', season: 'Comfortable, tall grass may limit visibility early season.', difficulty: 'Easy.', packing: ['Light jacket for dawn safari', 'Layered clothing'], route: 'Morning jeep safari when animals are most active.' }
-    }
-  };
-
-  function renderPlannerResult() {
-    const region = plannerRegion.value;
-    const season = plannerSeason.value;
-    const data = plannerData[region][season];
-
-    plannerResult.innerHTML = `
-      <div class="planner__result-item">
-        <h5>Weather</h5>
-        <p>${data.weather}</p>
-      </div>
-      <div class="planner__result-item">
-        <h5>Best Season Fit</h5>
-        <p>${data.season}</p>
-      </div>
-      <div class="planner__result-item">
-        <h5>Difficulty</h5>
-        <p>${data.difficulty}</p>
-      </div>
-      <div class="planner__result-item">
-        <h5>Pack For This</h5>
-        <ul>${data.packing.map((item) => `<li>${item}</li>`).join('')}</ul>
-      </div>
-      <div class="planner__result-item" style="grid-column: 1 / -1;">
-        <h5>Suggested Route</h5>
-        <p>${data.route}</p>
-      </div>
-    `;
-  }
-
-  if (plannerRegion && plannerSeason) {
-    plannerRegion.addEventListener('change', renderPlannerResult);
-    plannerSeason.addEventListener('change', renderPlannerResult);
-    renderPlannerResult();
-  }
-
-  /* -----------------------------------------------------------
-     9. CULTURE TABS
-     ----------------------------------------------------------- */
-  const cultureTabs = document.querySelectorAll('.culture__tab');
-  const culturePanels = document.querySelectorAll('.culture__panel');
-
-  cultureTabs.forEach((tab) => {
-    tab.addEventListener('click', () => {
-      const target = tab.getAttribute('data-tab');
-
-      cultureTabs.forEach((t) => {
-        t.classList.toggle('is-active', t === tab);
-        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-      });
-
-      culturePanels.forEach((panel) => {
-        panel.classList.toggle('is-active', panel.id === `panel-${target}`);
-      });
-    });
-  });
-
-  /* -----------------------------------------------------------
-     10. GALLERY LIGHTBOX
-     ----------------------------------------------------------- */
-  const galleryImages = Array.from(document.querySelectorAll('[data-lightbox]'));
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxClose = document.getElementById('lightboxClose');
-  const lightboxPrev = document.getElementById('lightboxPrev');
-  const lightboxNext = document.getElementById('lightboxNext');
-  let currentImageIndex = 0;
-
-  function openLightbox(index) {
-    currentImageIndex = index;
-    lightboxImg.src = galleryImages[index].src;
-    lightboxImg.alt = galleryImages[index].alt;
-    lightbox.classList.add('is-open');
-=======
-  function tick() {
-    const currentPhrase = phrases[phraseIndex];
-
-    if (isDeleting) {
-      charIndex -= 1;
-    } else {
-      charIndex += 1;
-    }
-
-    target.textContent = currentPhrase.slice(0, charIndex);
-
-    let delay = isDeleting ? 35 : 65;
-
-    if (!isDeleting && charIndex === currentPhrase.length) {
-      delay = 1800; // pause at full phrase
-      isDeleting = true;
-    } else if (isDeleting && charIndex === 0) {
-      isDeleting = false;
-      phraseIndex = (phraseIndex + 1) % phrases.length;
-      delay = 350;
-    }
-
-    setTimeout(tick, delay);
-  }
-
-  tick();
-}
-
-/* ================================================================
-   6. SCROLL REVEAL (INTERSECTION OBSERVER)
-================================================================ */
-function initScrollReveal() {
-  const revealEls = qsa('.reveal');
-
-  if (!('IntersectionObserver' in window)) {
-    revealEls.forEach((el) => el.classList.add('is-visible'));
-    return;
-  }
-
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
-  );
-
-  revealEls.forEach((el) => observer.observe(el));
-}
-
-/* ================================================================
-   7. ANIMATED COUNTERS
-================================================================ */
-function initCounters() {
-  const counters = qsa('.hero__stat-number');
-  let hasRun = false;
-
-  const runCounters = () => {
-    if (hasRun) return;
-    hasRun = true;
-
-    counters.forEach((counter) => {
-      const target = parseInt(counter.dataset.count, 10);
-      const duration = 1600;
-      const startTime = performance.now();
-
-      function update(now) {
-        const progress = Math.min((now - startTime) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-        counter.textContent = Math.floor(eased * target).toLocaleString();
-        if (progress < 1) {
-          requestAnimationFrame(update);
-        } else {
-          counter.textContent = target.toLocaleString();
-        }
+      label: 'Chitwan',
+      route: 'Sauraha → Rapti River canoe ride → Jungle jeep safari → Tharu village walk',
+      baseDifficulty: 'Easy',
+      seasons: {
+        spring: { weather: '18°C to 32°C, dry and warm, good wildlife visibility', packing: ['Light cottons', 'Insect repellent', 'Neutral colour clothing'] },
+        summer: { weather: '24°C to 36°C, hot and humid, monsoon flooding possible', packing: ['Breathable clothing', 'Rain jacket', 'Strong insect repellent'] },
+        autumn: { weather: '18°C to 30°C, tall grass cut back, best safari visibility', packing: ['Light layers', 'Binoculars', 'Sun hat'] },
+        winter: { weather: '8°C to 24°C, cool mornings with river mist', packing: ['Light jacket for dawn safari', 'Comfortable trousers'] }
       }
-      requestAnimationFrame(update);
-    });
+    },
+    mustang: {
+      label: 'Upper Mustang',
+      route: 'Jomsom → Kagbeni → Chele → Lo Manthang → Chhoser Caves',
+      baseDifficulty: 'Moderate',
+      seasons: {
+        spring: { weather: '2°C to 16°C, windy afternoons, desert terrain', packing: ['Wind-proof jacket', 'Dust mask', 'Lip balm and sunscreen'] },
+        summer: { weather: '8°C to 22°C, dry — Mustang sits in the Annapurna rain shadow', packing: ['Sun hat', 'Wind-proof layers', 'High-SPF sunscreen'] },
+        autumn: { weather: '0°C to 14°C, clear skies, ideal trekking window', packing: ['Down jacket', 'Trekking poles', 'Warm sleeping bag liner'] },
+        winter: { weather: '-15°C to 5°C, many teahouses closed', packing: ['Expedition down jacket', 'Insulated boots', 'Advance teahouse booking'] }
+      }
+    }
   };
 
-  const statsBlock = qs('#statsBlock');
-  if (!statsBlock) return;
+  /** Culture section cards. */
+  const CULTURE = [
+    { icon: '🎭', title: 'Festivals', tag: 'Dashain & Tihar', desc: 'Nepal\'s festival calendar peaks each autumn with Dashain\'s family gatherings and Tihar\'s five nights of light.' },
+    { icon: '🍲', title: 'Food', tag: 'Dal Bhat', desc: 'Lentils, rice and seasonal vegetables — the daily staple, refilled without asking across the whole country.' },
+    { icon: '🗣️', title: 'Languages', tag: '120+ tongues', desc: 'Nepali is the lingua franca, but Newari, Sherpa, Tamang, Gurung and dozens more are spoken regionally.' },
+    { icon: '🏛️', title: 'Heritage', tag: '7 valley sites', desc: 'Durbar Squares, stupas and temple courtyards built up over a thousand years of Malla and Newar craftsmanship.' },
+    { icon: '⛩️', title: 'UNESCO Sites', tag: '10 listings', desc: 'From Kathmandu Valley\'s monuments to Sagarmatha and Chitwan national parks — Nepal holds 10 UNESCO listings.' },
+    { icon: '🪈', title: 'Music & Dance', tag: 'Newari classical', desc: 'Panche baja ensembles and masked Newari dances still perform at temple courtyards during festival processions.' },
+    { icon: '🧵', title: 'Craft', tag: 'Thangka painting', desc: 'Buddhist thangka scroll painting and pashmina weaving remain living trades in Kathmandu\'s old quarters.' },
+    { icon: '🙏', title: 'Faith', tag: 'Hindu & Buddhist', desc: 'Hinduism and Buddhism have coexisted and blended in Nepal for centuries, visible at shared pilgrimage sites.' }
+  ];
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          runCounters();
-          observer.disconnect();
-        }
-      });
-    },
-    { threshold: 0.4 }
-  );
-  observer.observe(statsBlock);
-}
+  /** Gallery images (masonry). */
+  const GALLERY = [
+    { img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=700&q=80', caption: 'Sunrise over the Himalaya' },
+    { img: 'https://images.unsplash.com/photo-1558005530-a7958896ec60?w=700&q=80', caption: 'Kathmandu Durbar Square' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Phewa%20lake%2C%20Pokhara.jpg?width=800', caption: 'Phewa Lake, Pokhara' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Annapurna%20Range%20with%20Fishtail%20Mountain.JPG?width=800', caption: 'Annapurna high trail' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Greater%20one-horned%20rhinoceros%20at%20Chitwan.jpg?width=800', caption: 'Chitwan wetlands' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/KhumbuIcefall.jpg?width=800', caption: 'Everest Base Camp' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Namche%20Bazaar%20Nepal.jpg?width=800', caption: 'Namche Bazaar' },
+    { img: 'https://commons.wikimedia.org/wiki/Special:FilePath/Everest%20kalapatthar%20crop.jpg?width=800', caption: 'Summit ridge, Everest' }
+  ];
 
-/* ================================================================
-   8. ALTITUDE JOURNEY TIMELINE
-================================================================ */
-function initTimeline() {
-  const markers = qsa('.timeline__marker');
-  const fill = qs('#timelineFill');
-  const detail = qs('#timelineDetail');
-  const detailImg = qs('#timelineDetailImg');
-  const detailTitle = qs('#timelineDetailTitle');
-  const detailElevation = qs('#timelineDetailElevation');
-  const detailText = qs('#timelineDetailText');
-  const detailClose = qs('#timelineDetailClose');
+  /** FAQ entries. */
+  const FAQS = [
+    { q: 'Do I need a visa to visit Nepal?', a: 'Most nationalities can get a visa on arrival at Tribhuvan International Airport or land border crossings. Bring a passport photo and USD cash for the fee; check your specific nationality\'s requirements before you travel.' },
+    { q: 'What is the best season to trek in Nepal?', a: 'Autumn (September to November) and spring (March to May) offer the clearest skies and most stable weather. Winter treks are possible at lower altitudes; summer/monsoon is best reserved for the rain-shadow regions like Upper Mustang.' },
+    { q: 'Do I need travel insurance for trekking?', a: 'Yes. Insurance covering high-altitude trekking and helicopter evacuation up to at least 6,000 m is required for all our guided treks above Base Camp altitude.' },
+    { q: 'How fit do I need to be for Everest Base Camp?', a: 'No technical climbing skill is required, but you should be comfortable walking 5–7 hours a day for up to two weeks. We recommend several months of cardio and hill-walking preparation.' },
+    { q: 'Is altitude sickness a serious risk?', a: 'It can be, above roughly 3,000 m. Our itineraries build in acclimatisation days, and all guides carry oximeters and are trained to recognise early symptoms of acute mountain sickness.' },
+    { q: 'Can I customise a package?', a: 'Yes — every package on this site can be adjusted for dates, group size and pace. Add a note in the booking form message field and a consultant will follow up.' }
+  ];
 
-  function openDetail(marker) {
-    const placeKey = marker.dataset.place;
-    const place = TRIP_DATA.timelinePlaces[placeKey];
-    if (!place) return;
+  /* ===================================================================
+     2. UTILITY HELPERS
+  =================================================================== */
 
-    markers.forEach((m) => {
-      m.classList.remove('is-active');
-      m.setAttribute('aria-expanded', 'false');
-    });
-    marker.classList.add('is-active');
-    marker.setAttribute('aria-expanded', 'true');
+  /** Shorthand querySelector / querySelectorAll. */
+  const $ = (sel, ctx) => (ctx || document).querySelector(sel);
+  const $$ = (sel, ctx) => Array.from((ctx || document).querySelectorAll(sel));
 
-    const percent = marker.style.getPropertyValue('--marker-pos') || '0%';
-    fill.style.width = percent;
-
-    detailImg.src = place.img;
-    detailImg.alt = place.title;
-    detailTitle.textContent = place.title;
-    detailElevation.textContent = place.elevation;
-    detailText.textContent = place.text;
-    detail.hidden = false;
-    detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  /** Debounce helper for scroll/resize handlers. */
+  function debounce(fn, wait) {
+    let t;
+    return function (...args) {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), wait);
+    };
   }
 
-  markers.forEach((marker) => {
-    marker.addEventListener('click', () => openDetail(marker));
-  });
+  /** Escape a string for safe HTML text insertion. */
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
-  detailClose.addEventListener('click', () => {
-    detail.hidden = true;
-    markers.forEach((m) => {
-      m.classList.remove('is-active');
-      m.setAttribute('aria-expanded', 'false');
+  /* ===================================================================
+     3. STICKY NAVBAR + ACTIVE LINK HIGHLIGHTING
+  =================================================================== */
+  function initStickyNavbar() {
+    const header = $('#siteHeader');
+    if (!header) return;
+
+    const onScroll = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 40);
+    };
+    window.addEventListener('scroll', debounce(onScroll, 10));
+    onScroll();
+  }
+
+  function initActiveLinkOnScroll() {
+    const sections = $$('main section[id]');
+    const navLinks = $$('.nav-link');
+    if (!sections.length || !navLinks.length) return;
+
+    const map = new Map(navLinks.map((link) => [link.getAttribute('href').replace('#', ''), link]));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            navLinks.forEach((l) => l.classList.remove('active-link'));
+            const link = map.get(entry.target.id);
+            if (link) link.classList.add('active-link');
+          }
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 }
+    );
+
+    sections.forEach((s) => observer.observe(s));
+  }
+
+  /* ===================================================================
+     4. MOBILE MENU TOGGLE
+  =================================================================== */
+  function initMobileMenu() {
+    const toggle = $('#navbarToggle');
+    const links = $('#navbarLinks');
+    if (!toggle || !links) return;
+
+    toggle.addEventListener('click', () => {
+      const isOpen = links.classList.toggle('is-open');
+      toggle.classList.toggle('is-open', isOpen);
+      toggle.setAttribute('aria-expanded', String(isOpen));
     });
-  });
 
-  // Animate the fill line once the timeline scrolls into view
-  const timelineEl = qs('#timeline');
-  const fillObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          fill.style.width = '18%'; // gentle initial fill before user interacts
-          fillObserver.disconnect();
-        }
+    // Close menu on link click (mobile)
+    $$('.navbar__link', links).forEach((link) => {
+      link.addEventListener('click', () => {
+        links.classList.remove('is-open');
+        toggle.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
       });
-    },
-    { threshold: 0.3 }
-  );
-  if (timelineEl) fillObserver.observe(timelineEl);
-}
+    });
+  }
 
-/* ================================================================
-   9. SMART TRIP PLANNER
-================================================================ */
-function initTripPlanner() {
-  const form = qs('#plannerForm');
-  const result = qs('#plannerResult');
+  /* ===================================================================
+     5. HERO TYPING EFFECT
+  =================================================================== */
+  function initTypingEffect() {
+    const el = $('#typingText');
+    if (!el) return;
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
+    const phrases = [
+      'Trek the Roof of the World',
+      'Plan Smarter, Walk Farther',
+      'From Chitwan Jungle to Everest Summit'
+    ];
 
-    const regionKey = qs('#plannerRegion').value;
-    const seasonKey = qs('#plannerSeason').value;
-
-    if (!regionKey || !seasonKey) {
-      result.innerHTML = '<p class="planner__placeholder">Please choose both a region and a season.</p>';
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      el.textContent = phrases[0];
       return;
     }
 
-    const region = TRIP_DATA.regions[regionKey];
-    const weather = region.weather[seasonKey];
-    const packingList = region.packingList[seasonKey];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
 
-    result.innerHTML = `
-      <h3 class="plan-result__title">${region.name} — ${capitalize(seasonKey)}</h3>
-      <p class="difficulty difficulty--${region.difficulty.toLowerCase()}">${region.difficulty}</p>
-      <div class="plan-result__grid">
-        <div class="plan-result__block">
-          <h4>Expected Weather</h4>
-          <p>${weather}</p>
+    function tick() {
+      const current = phrases[phraseIndex];
+
+      if (!deleting) {
+        charIndex++;
+        el.textContent = current.slice(0, charIndex);
+        if (charIndex === current.length) {
+          deleting = true;
+          setTimeout(tick, 1800);
+          return;
+        }
+      } else {
+        charIndex--;
+        el.textContent = current.slice(0, charIndex);
+        if (charIndex === 0) {
+          deleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+        }
+      }
+      setTimeout(tick, deleting ? 35 : 65);
+    }
+
+    tick();
+  }
+
+  /* ===================================================================
+     6. ANIMATED COUNTERS
+  =================================================================== */
+  function initCounters() {
+    const counters = $$('.hero__stat-number');
+    if (!counters.length) return;
+
+    const animate = (el) => {
+      const target = parseInt(el.dataset.target, 10) || 0;
+      const suffix = el.dataset.suffix || '';
+      const duration = 1600;
+      const start = performance.now();
+
+      function frame(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target) + suffix;
+        if (progress < 1) requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(entry.target);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    counters.forEach((c) => observer.observe(c));
+  }
+
+  /* ===================================================================
+     7. ALTITUDE TIMELINE
+  =================================================================== */
+  function initTimeline() {
+    const track = $('#timelineTrackInner');
+    const fill = $('#timelineFill');
+    const detail = $('#timelineDetail');
+    if (!track || !detail) return;
+
+    const maxAlt = Math.max(...JOURNEY_STOPS.map((s) => s.altitude));
+
+    track.innerHTML = JOURNEY_STOPS.map((stop, i) => `
+      <button class="timeline__stop" data-index="${i}" role="listitem" aria-label="${escapeHTML(stop.name)}, ${escapeHTML(stop.altitudeLabel)}">
+        <span class="timeline__marker" data-marker="${i}">${i + 1}</span>
+        <span class="timeline__stop-name">${escapeHTML(stop.name)}</span>
+        <span class="timeline__stop-alt">${escapeHTML(stop.altitudeLabel)}</span>
+      </button>
+    `).join('');
+
+    function renderDetail(index) {
+      const stop = JOURNEY_STOPS[index];
+      detail.innerHTML = `
+        <div class="timeline__detail-card">
+          <img class="timeline__detail-img" src="${stop.img}" alt="View of ${escapeHTML(stop.name)}" loading="lazy">
+          <div class="timeline__detail-body">
+            <h3>${escapeHTML(stop.name)}</h3>
+            <div class="timeline__detail-meta">
+              <span>&#9650; ${escapeHTML(stop.altitudeLabel)}</span>
+              <span>&#9729; ${escapeHTML(stop.climate)}</span>
+              <span>&#9201; ${escapeHTML(stop.duration)}</span>
+            </div>
+            <p>${escapeHTML(stop.description)}</p>
+          </div>
         </div>
-        <div class="plan-result__block">
-          <h4>Packing List</h4>
-          <ul>${packingList.map((item) => `<li>${item}</li>`).join('')}</ul>
+      `;
+
+      $$('.timeline__marker', track).forEach((m) => m.classList.remove('is-active'));
+      const marker = track.querySelector(`[data-marker="${index}"]`);
+      if (marker) marker.classList.add('is-active');
+
+      const pct = (stop.altitude / maxAlt) * 100;
+      fill.style.width = pct + '%';
+    }
+
+    track.addEventListener('click', (e) => {
+      const btn = e.target.closest('.timeline__stop');
+      if (!btn) return;
+      renderDetail(parseInt(btn.dataset.index, 10));
+    });
+
+    // Reveal fill line + open first stop once the section scrolls into view
+    const section = $('#timeline');
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            renderDetail(0);
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+    if (section) observer.observe(section);
+  }
+
+  /* ===================================================================
+     8. DESTINATIONS RENDERER
+  =================================================================== */
+  function renderDestinations() {
+    const grid = $('#destinationsGrid');
+    if (!grid) return;
+
+    grid.innerHTML = DESTINATIONS.map((d) => `
+      <article class="destination-card reveal">
+        <img class="destination-card__img" src="${d.img}" alt="${escapeHTML(d.name)}" loading="lazy">
+        <div class="destination-card__overlay"></div>
+        <div class="destination-card__body">
+          <span class="destination-card__rating">&#9733; ${escapeHTML(d.rating)}</span>
+          <h3 class="destination-card__title">${escapeHTML(d.name)}</h3>
+          <p class="destination-card__desc">${escapeHTML(d.desc)}</p>
+          <a href="#planner" class="destination-card__link">Plan this route &rarr;</a>
         </div>
-        <div class="plan-result__block" style="grid-column: 1 / -1;">
-          <h4>Suggested Route</h4>
-          <p>${region.route}</p>
+      </article>
+    `).join('');
+  }
+
+  /* ===================================================================
+     9. PACKAGES RENDERER
+  =================================================================== */
+  function renderPackages() {
+    const grid = $('#packagesGrid');
+    if (!grid) return;
+
+    const diffLabel = { easy: 'Easy', moderate: 'Moderate', hard: 'Challenging' };
+
+    grid.innerHTML = PACKAGES.map((p) => `
+      <article class="package-card reveal ${p.featured ? 'package-card--featured' : ''}">
+        ${p.featured ? '<span class="package-card__badge">Best Seller</span>' : ''}
+        <h3 class="package-card__title">${escapeHTML(p.name)}</h3>
+        <p class="package-card__desc">${escapeHTML(p.desc)}</p>
+        <div class="package-card__meta">
+          <span class="package-card__meta-item">&#128197; ${escapeHTML(p.duration)}</span>
+          <span class="package-card__meta-item">&#128101; ${escapeHTML(p.groupSize)}</span>
+          <span class="package-card__difficulty package-card__difficulty--${p.difficulty}">${diffLabel[p.difficulty]}</span>
+        </div>
+        <div class="package-card__footer">
+          <p class="package-card__price">$${p.price}<span> / person</span></p>
+          <a href="#booking" class="btn btn--accent btn--sm">Book</a>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  /* ===================================================================
+     10. SMART TRIP PLANNER
+  =================================================================== */
+  function initPlanner() {
+    const form = $('#plannerForm');
+    const result = $('#plannerResult');
+    if (!form || !result) return;
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const region = $('#plannerRegion').value;
+      const season = $('#plannerSeason').value;
+
+      if (!region || !season) return;
+
+      const regionData = PLANNER_DATA[region];
+      const seasonData = regionData.seasons[season];
+      const seasonLabels = { spring: 'Spring', summer: 'Summer / Monsoon', autumn: 'Autumn', winter: 'Winter' };
+
+      result.innerHTML = `
+        <div class="planner__result-content">
+          <h3 class="planner__result-title">${escapeHTML(regionData.label)} — ${seasonLabels[season]}</h3>
+          <p class="planner__result-sub">${escapeHTML(regionData.route)}</p>
+
+          <div class="planner__result-grid">
+            <div class="planner__result-stat">
+              <span>Difficulty</span>
+              <strong>${escapeHTML(regionData.baseDifficulty)}</strong>
+            </div>
+            <div class="planner__result-stat">
+              <span>Season</span>
+              <strong>${seasonLabels[season]}</strong>
+            </div>
+            <div class="planner__result-stat">
+              <span>Region</span>
+              <strong>${escapeHTML(regionData.label)}</strong>
+            </div>
+          </div>
+
+          <div class="planner__result-section">
+            <h4>Weather Outlook</h4>
+            <p>${escapeHTML(seasonData.weather)}</p>
+          </div>
+
+          <div class="planner__result-section">
+            <h4>Packing List</h4>
+            <ul class="planner__packing-list">
+              ${seasonData.packing.map((item) => `<li>${escapeHTML(item)}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  /* ===================================================================
+     11. CULTURE RENDERER
+  =================================================================== */
+  function renderCulture() {
+    const grid = $('#cultureGrid');
+    if (!grid) return;
+
+    grid.innerHTML = CULTURE.map((c) => `
+      <article class="culture-card reveal">
+        <div class="culture-card__icon" aria-hidden="true">${c.icon}</div>
+        <h3 class="culture-card__title">${escapeHTML(c.title)}</h3>
+        <p class="culture-card__desc">${escapeHTML(c.desc)}</p>
+        <span class="culture-card__tag">${escapeHTML(c.tag)}</span>
+      </article>
+    `).join('');
+  }
+
+  /* ===================================================================
+     12. GALLERY + LIGHTBOX
+  =================================================================== */
+  function renderGallery() {
+    const masonry = $('#galleryMasonry');
+    if (!masonry) return;
+
+    masonry.innerHTML = GALLERY.map((g, i) => `
+      <div class="gallery__item" data-index="${i}" tabindex="0" role="button" aria-label="View photo: ${escapeHTML(g.caption)}">
+        <img src="${g.img}" alt="${escapeHTML(g.caption)}" loading="lazy">
+        <div class="gallery__item-overlay">${escapeHTML(g.caption)}</div>
+      </div>
+    `).join('');
+  }
+
+  function initLightbox() {
+    const masonry = $('#galleryMasonry');
+    const lightbox = $('#lightbox');
+    const img = $('#lightboxImage');
+    const caption = $('#lightboxCaption');
+    const closeBtn = $('#lightboxClose');
+    const prevBtn = $('#lightboxPrev');
+    const nextBtn = $('#lightboxNext');
+    if (!masonry || !lightbox) return;
+
+    let currentIndex = 0;
+
+    function open(index) {
+      currentIndex = index;
+      const item = GALLERY[currentIndex];
+      img.src = item.img;
+      img.alt = item.caption;
+      caption.textContent = item.caption;
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+    }
+
+    function close() {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    function show(delta) {
+      currentIndex = (currentIndex + delta + GALLERY.length) % GALLERY.length;
+      const item = GALLERY[currentIndex];
+      img.src = item.img;
+      img.alt = item.caption;
+      caption.textContent = item.caption;
+    }
+
+    masonry.addEventListener('click', (e) => {
+      const item = e.target.closest('.gallery__item');
+      if (!item) return;
+      open(parseInt(item.dataset.index, 10));
+    });
+    masonry.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const item = e.target.closest('.gallery__item');
+      if (!item) return;
+      e.preventDefault();
+      open(parseInt(item.dataset.index, 10));
+    });
+
+    closeBtn.addEventListener('click', close);
+    prevBtn.addEventListener('click', () => show(-1));
+    nextBtn.addEventListener('click', () => show(1));
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(-1);
+      if (e.key === 'ArrowRight') show(1);
+    });
+  }
+
+  /* ===================================================================
+     13. FAQ ACCORDION
+  =================================================================== */
+  function initFAQ() {
+    const list = $('#faqList');
+    if (!list) return;
+
+    list.innerHTML = FAQS.map((f, i) => `
+      <div class="faq__item" data-faq="${i}">
+        <button class="faq__question" aria-expanded="false" aria-controls="faq-answer-${i}">
+          <span>${escapeHTML(f.q)}</span>
+          <span class="faq__icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq__answer" id="faq-answer-${i}">
+          <p class="faq__answer-inner">${escapeHTML(f.a)}</p>
         </div>
       </div>
-    `;
-    result.classList.remove('is-visible');
-    void result.offsetWidth; // restart reveal-style animation
-    result.classList.add('is-visible');
-  });
-}
+    `).join('');
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+    $$('.faq__question', list).forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq__item');
+        const answer = $('.faq__answer', item);
+        const isOpen = item.classList.contains('is-open');
 
-/* ================================================================
-   10. GALLERY LIGHTBOX
-================================================================ */
-function initGalleryLightbox() {
-  const items = qsa('.gallery__item');
-  const lightbox = qs('#lightbox');
-  const lightboxImg = qs('#lightboxImg');
-  const lightboxCaption = qs('#lightboxCaption');
-  const closeBtn = qs('#lightboxClose');
-  const prevBtn = qs('#lightboxPrev');
-  const nextBtn = qs('#lightboxNext');
+        // Close all others (single-open accordion)
+        $$('.faq__item', list).forEach((other) => {
+          other.classList.remove('is-open');
+          $('.faq__answer', other).style.maxHeight = null;
+          $('.faq__question', other).setAttribute('aria-expanded', 'false');
+        });
 
-  let currentIndex = 0;
-
-  function openLightbox(index) {
-    currentIndex = index;
-    const item = items[currentIndex];
-    lightboxImg.src = item.dataset.full;
-    lightboxImg.alt = item.dataset.caption;
-    lightboxCaption.textContent = item.dataset.caption;
-    lightbox.hidden = false;
-    closeBtn.focus();
->>>>>>> Stashed changes
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeLightbox() {
-<<<<<<< Updated upstream
-    lightbox.classList.remove('is-open');
-    document.body.style.overflow = '';
-  }
-
-  function showImage(delta) {
-    currentImageIndex = (currentImageIndex + delta + galleryImages.length) % galleryImages.length;
-    lightboxImg.src = galleryImages[currentImageIndex].src;
-    lightboxImg.alt = galleryImages[currentImageIndex].alt;
-  }
-
-  galleryImages.forEach((img, index) => {
-    img.addEventListener('click', () => openLightbox(index));
-  });
-  if (lightboxClose) lightboxClose.addEventListener('click', closeLightbox);
-  if (lightboxPrev) lightboxPrev.addEventListener('click', () => showImage(-1));
-  if (lightboxNext) lightboxNext.addEventListener('click', () => showImage(1));
-  if (lightbox) {
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-  }
-  document.addEventListener('keydown', (e) => {
-    if (!lightbox || !lightbox.classList.contains('is-open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') showImage(-1);
-    if (e.key === 'ArrowRight') showImage(1);
-  });
-
-  /* -----------------------------------------------------------
-     11. BOOKING FORM VALIDATION
-     ----------------------------------------------------------- */
-  const bookingForm = document.getElementById('bookingForm');
-  const formSuccess = document.getElementById('formSuccess');
-
-  const validators = {
-    fullName: (v) => v.trim().length >= 2 || 'Please enter your full name.',
-    email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Please enter a valid email address.',
-    phone: (v) => /^[+\d][\d\s-]{6,}$/.test(v.trim()) || 'Please enter a valid phone number.',
-    destination: (v) => v !== '' || 'Please choose a destination.',
-    travelDate: (v) => v !== '' || 'Please select a travel date.',
-    travelers: (v) => (v !== '' && Number(v) >= 1) || 'Please enter at least 1 traveler.',
-    budget: (v) => v !== '' || 'Please select a budget range.',
-    travelStyle: (v) => v !== '' || 'Please select a travel style.'
-=======
-    lightbox.hidden = true;
-    document.body.style.overflow = '';
-  }
-
-  function showRelative(offset) {
-    currentIndex = (currentIndex + offset + items.length) % items.length;
-    openLightbox(currentIndex);
-  }
-
-  items.forEach((item, index) => {
-    item.addEventListener('click', () => openLightbox(index));
-  });
-
-  closeBtn.addEventListener('click', closeLightbox);
-  prevBtn.addEventListener('click', () => showRelative(-1));
-  nextBtn.addEventListener('click', () => showRelative(1));
-
-  lightbox.addEventListener('click', (event) => {
-    if (event.target === lightbox) closeLightbox();
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (lightbox.hidden) return;
-    if (event.key === 'Escape') closeLightbox();
-    if (event.key === 'ArrowLeft') showRelative(-1);
-    if (event.key === 'ArrowRight') showRelative(1);
-  });
-}
-
-/* ================================================================
-   11. TESTIMONIALS SLIDER
-================================================================ */
-function initTestimonialsSlider() {
-  const track = qs('#testimonialsTrack');
-  const cards = qsa('.testimonial-card', track);
-  const dotsContainer = qs('#testimonialDots');
-  const prevBtn = qs('#testimonialPrev');
-  const nextBtn = qs('#testimonialNext');
-
-  let currentIndex = 0;
-  let autoTimer = null;
-
-  cards.forEach((_, index) => {
-    const dot = document.createElement('button');
-    dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
-    if (index === 0) dot.classList.add('is-active');
-    dot.addEventListener('click', () => goTo(index));
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = qsa('button', dotsContainer);
-
-  function goTo(index) {
-    currentIndex = (index + cards.length) % cards.length;
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    dots.forEach((dot, i) => dot.classList.toggle('is-active', i === currentIndex));
-    cards.forEach((card, i) => card.setAttribute('aria-hidden', String(i !== currentIndex)));
-    resetAutoplay();
-  }
-
-  function resetAutoplay() {
-    clearInterval(autoTimer);
-    autoTimer = setInterval(() => goTo(currentIndex + 1), 6000);
-  }
-
-  prevBtn.addEventListener('click', () => goTo(currentIndex - 1));
-  nextBtn.addEventListener('click', () => goTo(currentIndex + 1));
-
-  resetAutoplay();
-}
-
-/* ================================================================
-   12. FAQ ACCORDION
-================================================================ */
-function initFaqAccordion() {
-  const items = qsa('.faq-item');
-
-  items.forEach((item) => {
-    const question = qs('.faq-item__question', item);
-
-    question.addEventListener('click', () => {
-      const isOpen = item.classList.contains('is-open');
-
-      // Close all others (single-open accordion behaviour)
-      items.forEach((other) => {
-        other.classList.remove('is-open');
-        qs('.faq-item__question', other).setAttribute('aria-expanded', 'false');
+        if (!isOpen) {
+          item.classList.add('is-open');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          btn.setAttribute('aria-expanded', 'true');
+        }
       });
-
-      if (!isOpen) {
-        item.classList.add('is-open');
-        question.setAttribute('aria-expanded', 'true');
-      }
     });
-  });
-}
+  }
 
-/* ================================================================
-   13. BOOKING FORM VALIDATION
-================================================================ */
-function initBookingForm() {
-  const form = qs('#bookingForm');
-  const popup = qs('#successPopup');
-  const popupClose = qs('#successPopupClose');
+  /* ===================================================================
+     14. BOOKING FORM VALIDATION + SUCCESS POPUP
+  =================================================================== */
+  function initBookingForm() {
+    const form = $('#bookingForm');
+    const popupOverlay = $('#popupOverlay');
+    const popupClose = $('#popupClose');
+    const popupOk = $('#popupOk');
+    if (!form) return;
 
-  const validators = {
-    name: (value) => value.trim().length >= 2 || 'Please enter your full name.',
-    email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Enter a valid email address.',
-    phone: (value) => /^[0-9+\-\s]{7,15}$/.test(value) || 'Enter a valid phone number.',
-    destination: (value) => value !== '' || 'Please select a destination.',
-    date: (value) => {
-      if (!value) return 'Please select a date.';
-      const chosen = new Date(value);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return chosen >= today || 'Date must be today or in the future.';
-    },
-    guests: (value) => (Number(value) >= 1 && Number(value) <= 20) || 'Guests must be between 1 and 20.'
->>>>>>> Stashed changes
-  };
-
-  function validateField(field) {
-    const rule = validators[field.name];
-    if (!rule) return true;
-<<<<<<< Updated upstream
-    const result = rule(field.value);
-    const group = field.closest('.form__group');
-    const errorEl = bookingForm.querySelector(`[data-error="${field.name}"]`);
-
-    if (result === true) {
-      group.classList.remove('has-error');
-      if (errorEl) errorEl.textContent = '';
-      return true;
-    } else {
-      group.classList.add('has-error');
-      if (errorEl) errorEl.textContent = result;
-      return false;
+    // Prevent past-date selection
+    const dateInput = $('#bookDate');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.setAttribute('min', today);
     }
-  }
 
-  if (bookingForm) {
-    Object.keys(validators).forEach((name) => {
-      const field = bookingForm.elements[name];
-      if (field) {
-        field.addEventListener('blur', () => validateField(field));
+    const validators = {
+      bookName: (v) => v.trim().length >= 2 || 'Please enter your full name.',
+      bookEmail: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Enter a valid email address.',
+      bookPhone: (v) => /^[0-9+\-\s]{7,15}$/.test(v) || 'Enter a valid phone number.',
+      bookDestination: (v) => v !== '' || 'Please choose a destination.',
+      bookDate: (v) => v !== '' || 'Please choose a travel date.',
+      bookGuests: (v) => (parseInt(v, 10) >= 1 && parseInt(v, 10) <= 20) || 'Guests must be between 1 and 20.'
+    };
+
+    function validateField(id) {
+      const field = document.getElementById(id);
+      const errorEl = document.getElementById('err-' + id);
+      const rule = validators[id];
+      if (!field || !rule) return true;
+
+      const result = rule(field.value);
+      const group = field.closest('.form-group');
+
+      if (result === true) {
+        group.classList.remove('has-error');
+        if (errorEl) errorEl.textContent = '';
+        return true;
+      } else {
+        group.classList.add('has-error');
+        if (errorEl) errorEl.textContent = result;
+        return false;
       }
+    }
+
+    Object.keys(validators).forEach((id) => {
+      const field = document.getElementById(id);
+      if (!field) return;
+      field.addEventListener('blur', () => validateField(id));
+      field.addEventListener('input', () => {
+        if (field.closest('.form-group').classList.contains('has-error')) validateField(id);
+      });
     });
 
-    bookingForm.addEventListener('submit', (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      let isValid = true;
 
-      Object.keys(validators).forEach((name) => {
-        const field = bookingForm.elements[name];
-        if (field && !validateField(field)) isValid = false;
+      let allValid = true;
+      Object.keys(validators).forEach((id) => {
+        if (!validateField(id)) allValid = false;
       });
 
-      if (!isValid) {
-        const firstError = bookingForm.querySelector('.has-error input, .has-error select');
+      if (!allValid) {
+        const firstError = form.querySelector('.has-error input, .has-error select');
         if (firstError) firstError.focus();
         return;
       }
 
-      formSuccess.classList.add('is-visible');
-      bookingForm.reset();
-      setTimeout(() => formSuccess.classList.remove('is-visible'), 6000);
+      // Simulated AJAX submission (would normally POST to a backend)
+      simulateBookingSubmit(new FormData(form)).then(() => {
+        popupOverlay.hidden = false;
+        form.reset();
+      });
+    });
+
+    function closePopup() {
+      popupOverlay.hidden = true;
+    }
+    popupClose.addEventListener('click', closePopup);
+    popupOk.addEventListener('click', closePopup);
+    popupOverlay.addEventListener('click', (e) => {
+      if (e.target === popupOverlay) closePopup();
     });
   }
 
-  /* -----------------------------------------------------------
-     12. NEWSLETTER FORM (footer)
-     ----------------------------------------------------------- */
-  const newsletterForm = document.getElementById('newsletterForm');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
+  /** Simulated async submission — resolves after a short delay. */
+  function simulateBookingSubmit(formData) {
+    return new Promise((resolve) => {
+      // In a real deployment this would be:
+      // fetch('/api/bookings', { method: 'POST', body: formData }).then(...)
+      setTimeout(resolve, 400);
+    });
+  }
+
+  /* ===================================================================
+     15. NEWSLETTER FORM (fetch/AJAX demo)
+  =================================================================== */
+  function initNewsletter() {
+    const form = $('#newsletterForm');
+    const msg = $('#newsletterMsg');
+    if (!form) return;
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const input = newsletterForm.querySelector('input');
-      const button = newsletterForm.querySelector('button');
-      const originalText = button.textContent;
-      button.textContent = 'Joined ✓';
-      input.value = '';
-      setTimeout(() => { button.textContent = originalText; }, 2500);
-    });
-  }
+      const email = $('#newsletterEmail').value;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        msg.textContent = 'Please enter a valid email address.';
+        return;
+      }
 
-  /* -----------------------------------------------------------
-     13. BACK TO TOP
-     ----------------------------------------------------------- */
-  const backToTop = document.getElementById('backToTop');
-  window.addEventListener('scroll', () => {
-    backToTop.classList.toggle('is-visible', window.scrollY > 600);
-  }, { passive: true });
-=======
+      msg.textContent = 'Subscribing…';
 
-    const errorEl = qs(`#err-${field.name}`);
-    const result = rule(field.value);
-
-    if (result === true) {
-      errorEl.textContent = '';
-      field.setAttribute('aria-invalid', 'false');
-      return true;
-    }
-    errorEl.textContent = result;
-    field.setAttribute('aria-invalid', 'true');
-    return false;
-  }
-
-  qsa('input, select', form).forEach((field) => {
-    if (!validators[field.name]) return;
-    field.addEventListener('blur', () => validateField(field));
-  });
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    let isValid = true;
-    Object.keys(validators).forEach((name) => {
-      const field = form.elements[name];
-      if (field && !validateField(field)) isValid = false;
-    });
-
-    if (!isValid) {
-      const firstInvalid = qs('[aria-invalid="true"]', form);
-      if (firstInvalid) firstInvalid.focus();
-      return;
-    }
-
-    // Simulate an async booking submission (see fetch/AJAX demo below)
-    submitBookingRequest(new FormData(form)).then(() => {
-      showSuccessPopup();
-      form.reset();
-    });
-  });
-
-  function showSuccessPopup() {
-    popup.hidden = false;
-    setTimeout(() => { popup.hidden = true; }, 6000);
-  }
-  popupClose.addEventListener('click', () => { popup.hidden = true; });
-}
-
-/* ================================================================
-   14. NEWSLETTER FORM
-================================================================ */
-function initNewsletterForm() {
-  const form = qs('#newsletterForm');
-  const msg = qs('#newsletterMsg');
-
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    const email = qs('#newsletterEmail').value;
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      msg.textContent = 'Please enter a valid email address.';
-      return;
-    }
-
-    msg.textContent = `Subscribed! Updates will be sent to ${email}.`;
-    form.reset();
-  });
-}
-
-/* ================================================================
-   15. SMOOTH SCROLL / BACK TO TOP
-================================================================ */
-function initSmoothScrollAndBackToTop() {
-  qsa('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener('click', (event) => {
-      const targetId = anchor.getAttribute('href');
-      if (targetId.length <= 1) return;
-      const targetEl = qs(targetId);
-      if (!targetEl) return;
-      event.preventDefault();
-      targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-  });
-
-  const backToTop = qs('#backToTop');
-  window.addEventListener('scroll', debounce(() => {
-    backToTop.hidden = window.scrollY < 500;
-  }, 100));
->>>>>>> Stashed changes
-
-  backToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-<<<<<<< Updated upstream
-
-  /* -----------------------------------------------------------
-     14. BUTTON RIPPLE EFFECT
-     ----------------------------------------------------------- */
-  document.querySelectorAll('.btn--ripple').forEach((btn) => {
-    btn.addEventListener('click', function (e) {
-      const rect = this.getBoundingClientRect();
-      const ripple = document.createElement('span');
-      const size = Math.max(rect.width, rect.height);
-      ripple.className = 'ripple-el';
-      ripple.style.width = ripple.style.height = `${size}px`;
-      ripple.style.left = `${e.clientX - rect.left - size / 2}px`;
-      ripple.style.top = `${e.clientY - rect.top - size / 2}px`;
-      this.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 650);
-    });
-  });
-
-=======
-}
-
-/* ================================================================
-   16. RIPPLE BUTTON EFFECT
-================================================================ */
-function initRippleButtons() {
-  qsa('.btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      btn.classList.remove('is-rippling');
-      void btn.offsetWidth; // restart animation
-      btn.classList.add('is-rippling');
-    });
-  });
-}
-
-/* ================================================================
-   17. FETCH / AJAX DEMO
-   Simulates a POST request to a booking endpoint. In production
-   this would call a real backend; here it demonstrates the Fetch
-   API pattern with a local JSON echo using a Promise + timeout,
-   which mirrors how the same function would look with a live URL.
-================================================================ */
-function submitBookingRequest(formData) {
-  const payload = Object.fromEntries(formData.entries());
-
-  // Example of what a real call would look like:
-  //
-  // return fetch('/api/bookings', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(payload)
-  // }).then((res) => res.json());
-
-  console.info('Booking request payload (AJAX demo):', payload);
-
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ status: 'ok', received: payload }), 600);
-  });
-}
-
-/* ================================================================
-   18. INIT
-================================================================ */
-function initLazyLoadFallback() {
-  // Native loading="lazy" is used in HTML; this is a graceful
-  // fallback for older browsers using IntersectionObserver.
-  if ('loading' in HTMLImageElement.prototype) return;
-
-  const lazyImages = qsa('img[loading="lazy"]');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        img.src = img.src; // trigger load
-        observer.unobserve(img);
+      try {
+        // Demonstration fetch call — a placeholder endpoint that always
+        // resolves, standing in for a real newsletter API in production.
+        await fetch('https://jsonplaceholder.typicode.com/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        msg.textContent = 'Subscribed! Watch your inbox for trip ideas.';
+        form.reset();
+      } catch (err) {
+        msg.textContent = 'Subscribed locally — network sync will retry later.';
       }
     });
-  });
-  lazyImages.forEach((img) => observer.observe(img));
-}
+  }
 
-document.addEventListener('DOMContentLoaded', () => {
-  initStickyNav();
-  initMobileMenu();
-  initTypingEffect();
-  initScrollReveal();
-  initCounters();
-  initTimeline();
-  initTripPlanner();
-  initGalleryLightbox();
-  initTestimonialsSlider();
-  initFaqAccordion();
-  initBookingForm();
-  initNewsletterForm();
-  initSmoothScrollAndBackToTop();
-  initRippleButtons();
-  initLazyLoadFallback();
+  /* ===================================================================
+     16. SCROLL REVEAL
+  =================================================================== */
+  function initScrollReveal() {
+    const targets = $$('.reveal, .reveal-stagger, .destinations__grid, .packages__grid, .culture__grid');
+    if (!targets.length) return;
 
-  qs('#footerYear').textContent = new Date().getFullYear();
->>>>>>> Stashed changes
-});
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            obs.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    targets.forEach((t) => observer.observe(t));
+  }
+
+  /* ===================================================================
+     17. SMOOTH SCROLL + BACK TO TOP
+  =================================================================== */
+  function initSmoothScrollAndBackToTop() {
+    const backToTop = $('#backToTop');
+    const scrollIndicator = $('#scrollIndicator');
+
+    if (scrollIndicator) {
+      scrollIndicator.addEventListener('click', () => {
+        const target = $('#timeline');
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    if (backToTop) {
+      window.addEventListener('scroll', debounce(() => {
+        backToTop.hidden = window.scrollY < 600;
+      }, 100));
+
+      backToTop.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  }
+
+  /* ===================================================================
+     18. RIPPLE BUTTON EFFECT
+  =================================================================== */
+  function initRippleEffect() {
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.btn--accent, .btn--ghost');
+      if (!btn) return;
+
+      const rect = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      const size = Math.max(rect.width, rect.height);
+
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+      ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    });
+  }
+
+  /* ===================================================================
+     19. INIT
+  =================================================================== */
+  function init() {
+    // Footer year
+    const yearEl = $('#footerYear');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    initStickyNavbar();
+    initMobileMenu();
+    initTypingEffect();
+    initCounters();
+
+    initTimeline();
+    renderDestinations();
+    renderPackages();
+    initPlanner();
+    renderCulture();
+    renderGallery();
+    initLightbox();
+    initFAQ();
+    initBookingForm();
+    initNewsletter();
+
+    initScrollReveal();
+    initActiveLinkOnScroll();
+    initSmoothScrollAndBackToTop();
+    initRippleEffect();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
