@@ -1029,6 +1029,7 @@ const GUIDES = [
     initTimeline();
     renderDestinations();
     renderPackages();
+    renderGuides();
     initPlanner();
     renderCulture();
     renderGallery();
