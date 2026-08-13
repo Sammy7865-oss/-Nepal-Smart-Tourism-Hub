@@ -564,7 +564,7 @@
 
     grid.innerHTML = PACKAGES.map((p) => `
       <article class="package-card reveal ${p.featured ? 'package-card--featured' : ''}">
-        ${p.featured ? '<span class="package-card__badge">Best Seller</span>' : ''}
+        ${p.featured ? '<span class="package-card__badge">Featured</span>' : ''}
         <h3 class="package-card__title">${escapeHTML(p.name)}</h3>
         <p class="package-card__desc">${escapeHTML(p.desc)}</p>
         <div class="package-card__meta">
