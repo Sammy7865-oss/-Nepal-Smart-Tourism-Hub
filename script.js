@@ -621,6 +621,55 @@ const GUIDES = [
       </article>
     `).join('');
   }
+   /* ===================================================================
+   LOCAL GUIDES RENDERER
+=================================================================== */
+function renderGuides() {
+  const grid = $('#guidesGrid');
+  if (!grid) return;
+
+  grid.innerHTML = GUIDES.map((g) => `
+    <article class="guide-card reveal">
+      <img
+        class="guide-card__img"
+        src="${g.img}"
+        alt="${escapeHTML(g.name)}"
+        loading="lazy"
+      >
+
+      <div class="guide-card__body">
+        <h3 class="guide-card__name">${escapeHTML(g.name)}</h3>
+
+        <p class="guide-card__destination">
+          ${escapeHTML(g.destination)}
+        </p>
+
+        <p class="guide-card__expertise">
+          ${escapeHTML(g.expertise)}
+        </p>
+
+        <div class="guide-card__meta">
+          <span>⭐ ${escapeHTML(g.rating)}</span>
+          <span>${escapeHTML(g.experience)}</span>
+        </div>
+
+        <p class="guide-card__languages">
+          ${g.languages.map((lang) => escapeHTML(lang)).join(' · ')}
+        </p>
+
+        <div class="guide-card__footer">
+          <span class="guide-card__price">
+            $${g.price}<small> / day</small>
+          </span>
+
+          <a href="#booking" class="btn btn--accent btn--sm">
+            Book Guide
+          </a>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
 
   /* ===================================================================
      10. SMART TRIP PLANNER
