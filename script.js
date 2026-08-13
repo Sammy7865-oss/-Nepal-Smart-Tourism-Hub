@@ -235,6 +235,89 @@ const GUIDES = [
     img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80'
   }
 ];
+   /* ===================================================================
+   ACCOMMODATION DATA
+=================================================================== */
+
+const ACCOMMODATIONS = [
+  {
+    name: 'Hotel Yak & Yeti',
+    type: 'hotel',
+    typeLabel: 'Hotel',
+    location: 'kathmandu',
+    locationLabel: 'Kathmandu',
+    rating: '4.5',
+    price: 80,
+    description: 'A comfortable luxury stay in the heart of Kathmandu with easy access to major attractions.',
+    amenities: ['Wi-Fi', 'Breakfast', 'Restaurant', 'Airport Transfer'],
+    img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&q=80'
+  },
+
+  {
+    name: 'Phewa Lakeside Homestay',
+    type: 'homestay',
+    typeLabel: 'Homestay',
+    location: 'pokhara',
+    locationLabel: 'Pokhara',
+    rating: '4.8',
+    price: 35,
+    description: 'A peaceful local homestay near Phewa Lake offering a warm family atmosphere and mountain views.',
+    amenities: ['Breakfast', 'Lake View', 'Wi-Fi', 'Local Food'],
+    img: 'https://images.unsplash.com/photo-1601918774946-25832a4be0d6?w=800&q=80'
+  },
+
+  {
+    name: 'Everest View Lodge',
+    type: 'lodge',
+    typeLabel: 'Mountain Lodge',
+    location: 'everest',
+    locationLabel: 'Everest Region',
+    rating: '4.9',
+    price: 55,
+    description: 'A mountain lodge offering spectacular Himalayan scenery and a comfortable base for trekkers.',
+    amenities: ['Mountain View', 'Dining', 'Hot Shower', 'Wi-Fi'],
+    img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=80'
+  },
+
+  {
+    name: 'Barahi Jungle Resort',
+    type: 'resort',
+    typeLabel: 'Resort',
+    location: 'chitwan',
+    locationLabel: 'Chitwan',
+    rating: '4.6',
+    price: 95,
+    description: 'A relaxing jungle resort close to Chitwan National Park with safari and nature experiences.',
+    amenities: ['Pool', 'Restaurant', 'Safari', 'Wi-Fi'],
+    img: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80'
+  },
+
+  {
+    name: 'Thamel Heritage Guesthouse',
+    type: 'guesthouse',
+    typeLabel: 'Guesthouse',
+    location: 'kathmandu',
+    locationLabel: 'Kathmandu',
+    rating: '4.4',
+    price: 28,
+    description: 'A budget-friendly guesthouse located close to the restaurants, shops and attractions of Thamel.',
+    amenities: ['Wi-Fi', 'Breakfast', '24/7 Reception'],
+    img: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=80'
+  },
+
+  {
+    name: 'Lo Manthang Mountain Lodge',
+    type: 'lodge',
+    typeLabel: 'Mountain Lodge',
+    location: 'mustang',
+    locationLabel: 'Upper Mustang',
+    rating: '4.8',
+    price: 45,
+    description: 'A traditional mountain lodge providing a comfortable stop while exploring the unique Mustang landscape.',
+    amenities: ['Mountain View', 'Local Food', 'Hot Meals'],
+    img: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=800&q=80'
+  }
+];
   const PLANNER_DATA = {
     everest: {
       label: 'Everest Region',
@@ -670,7 +753,233 @@ function renderGuides() {
     </article>
   `).join('');
 }
+/* ===================================================================
+   ACCOMMODATION RENDERER
+=================================================================== */
 
+function renderAccommodations(
+  typeFilter = 'all',
+  locationFilter = 'all'
+) {
+  const grid = $('#accommodationGrid');
+  const empty = $('#accommodationEmpty');
+
+  if (!grid) return;
+
+  const filtered = ACCOMMODATIONS.filter((item) => {
+
+    const typeMatch =
+      typeFilter === 'all' ||
+      item.type === typeFilter;
+
+    const locationMatch =
+      locationFilter === 'all' ||
+      item.location === locationFilter;
+
+    return typeMatch && locationMatch;
+  });
+
+
+  if (!filtered.length) {
+    grid.innerHTML = '';
+
+    if (empty) {
+      empty.hidden = false;
+    }
+
+    return;
+  }
+
+
+  if (empty) {
+    empty.hidden = true;
+  }
+
+
+  grid.innerHTML = filtered.map((item) => `
+    <article class="accommodation-card reveal">
+
+      <div class="accommodation-card__image-wrap">
+
+        <img
+          class="accommodation-card__image"
+          src="${item.img}"
+          alt="${escapeHTML(item.name)}"
+          loading="lazy"
+        >
+
+        <span class="accommodation-card__type">
+          ${escapeHTML(item.typeLabel)}
+        </span>
+
+        <span class="accommodation-card__rating">
+          ★ ${escapeHTML(item.rating)}
+        </span>
+
+      </div>
+
+
+      <div class="accommodation-card__body">
+
+        <h3 class="accommodation-card__name">
+          ${escapeHTML(item.name)}
+        </h3>
+
+        <p class="accommodation-card__location">
+          📍 ${escapeHTML(item.locationLabel)}
+        </p>
+
+        <p class="accommodation-card__description">
+          ${escapeHTML(item.description)}
+        </p>
+
+
+        <div class="accommodation-card__amenities">
+
+          ${item.amenities.map((amenity) => `
+            <span class="accommodation-card__amenity">
+              ${escapeHTML(amenity)}
+            </span>
+          `).join('')}
+
+        </div>
+
+
+        <div class="accommodation-card__footer">
+
+          <p class="accommodation-card__price">
+            $${item.price}
+            <small>/ night</small>
+          </p>
+
+          <button
+            type="button"
+            class="btn btn--accent btn--sm accommodation-book-btn"
+            data-name="${escapeHTML(item.name)}"
+            data-location="${escapeHTML(item.locationLabel)}"
+            data-price="${item.price}"
+          >
+            Book
+          </button>
+
+        </div>
+
+      </div>
+
+    </article>
+  `).join('');
+
+
+  /*
+   * Add booking buttons
+   */
+  $$('.accommodation-book-btn', grid).forEach((button) => {
+
+    button.addEventListener('click', () => {
+
+      const booking = {
+        accommodation: button.dataset.name,
+        location: button.dataset.location,
+        price: Number(button.dataset.price),
+        bookedAt: new Date().toISOString()
+      };
+
+
+      /*
+       * Get previous bookings
+       */
+      const bookings =
+        JSON.parse(
+          localStorage.getItem('accommodationBookings') || '[]'
+        );
+
+
+      /*
+       * Add new booking
+       */
+      bookings.push(booking);
+
+
+      /*
+       * Save to localStorage
+       */
+      localStorage.setItem(
+        'accommodationBookings',
+        JSON.stringify(bookings)
+      );
+
+
+      alert(
+        `${booking.accommodation} has been added to your bookings.`
+      );
+
+    });
+
+  });
+
+
+  /*
+   * Observe newly generated reveal cards
+   */
+  $$('.accommodation-card.reveal', grid).forEach((card) => {
+    card.classList.add('is-visible');
+  });
+}
+   /* ===================================================================
+   ACCOMMODATION FILTERS
+=================================================================== */
+
+function initAccommodation() {
+
+  const typeSelect = $('#accommodationType');
+  const locationSelect = $('#accommodationLocation');
+  const resetButton = $('#accommodationReset');
+
+  if (!typeSelect || !locationSelect) return;
+
+
+  function applyFilters() {
+
+    renderAccommodations(
+      typeSelect.value,
+      locationSelect.value
+    );
+
+  }
+
+
+  typeSelect.addEventListener(
+    'change',
+    applyFilters
+  );
+
+
+  locationSelect.addEventListener(
+    'change',
+    applyFilters
+  );
+
+
+  if (resetButton) {
+
+    resetButton.addEventListener('click', () => {
+
+      typeSelect.value = 'all';
+      locationSelect.value = 'all';
+
+      renderAccommodations();
+
+    });
+
+  }
+
+
+  /*
+   * Initial rendering
+   */
+  renderAccommodations();
+
+}
   /* ===================================================================
      10. SMART TRIP PLANNER
   =================================================================== */
@@ -1079,6 +1388,7 @@ function renderGuides() {
     renderDestinations();
     renderPackages();
     renderGuides();
+    initAccommodation();
     initPlanner();
     renderCulture();
     renderGallery();
