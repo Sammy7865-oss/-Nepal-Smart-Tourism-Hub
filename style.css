@@ -329,10 +329,11 @@ section {
 .is-scrolled .navbar__logo { color: var(--color-primary-dark); }
 
 .navbar__logo-icon {
-  width: 28px;
-  height: 28px;
+   width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
   flex-shrink: 0;
-  color: var(--color-accent);
 }
 
 .navbar__logo-accent { color: var(--color-accent); }
