@@ -192,7 +192,49 @@
    * Smart Trip Planner data set.
    * Keyed by region -> season, holding weather / packing / route data.
    * This stands in for a live weather API for the coursework demo.
-   */
+   *//** Local guide profiles. */
+const GUIDES = [
+  {
+    name: 'Suman Gurung',
+    destination: 'Pokhara',
+    expertise: 'Trekking, local culture & adventure',
+    experience: '8 years',
+    languages: ['Nepali', 'English', 'Hindi'],
+    rating: '4.8',
+    price: 35,
+    img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=80'
+  },
+  {
+    name: 'Maya Tamang',
+    destination: 'Kathmandu Valley',
+    expertise: 'Heritage, temples & local culture',
+    experience: '6 years',
+    languages: ['Nepali', 'English', 'Tamang'],
+    rating: '4.9',
+    price: 30,
+    img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=600&q=80'
+  },
+  {
+    name: 'Rajan Thapa',
+    destination: 'Chitwan',
+    expertise: 'Wildlife, jungle safari & Tharu culture',
+    experience: '7 years',
+    languages: ['Nepali', 'English', 'Hindi'],
+    rating: '4.7',
+    price: 28,
+    img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&q=80'
+  },
+  {
+    name: 'Pasang Sherpa',
+    destination: 'Everest Region',
+    expertise: 'High-altitude trekking & Sherpa culture',
+    experience: '10 years',
+    languages: ['Nepali', 'English', 'Sherpa'],
+    rating: '4.9',
+    price: 45,
+    img: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&q=80'
+  }
+];
   const PLANNER_DATA = {
     everest: {
       label: 'Everest Region',
