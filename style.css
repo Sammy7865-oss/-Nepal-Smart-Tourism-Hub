@@ -769,6 +769,111 @@ section {
   border-color: var(--color-accent-light);
   gap: 0.6rem;
 }
+/* ---------------------------------------------------------------------
+   LOCAL GUIDES
+   --------------------------------------------------------------------- */
+
+.guides {
+  padding: var(--space-xl) 0;
+}
+
+.guides__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-md);
+}
+
+.guide-card {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: #fff;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-med), box-shadow var(--transition-med);
+}
+
+.guide-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.guide-card__img {
+  display: block;
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.8s var(--ease-out);
+}
+
+.guide-card:hover .guide-card__img {
+  transform: scale(1.05);
+}
+
+.guide-card__body {
+  padding: var(--space-sm);
+}
+
+.guide-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.guide-card__name {
+  margin-bottom: 0.2rem;
+  font-size: 1.15rem;
+}
+
+.guide-card__destination {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.guide-card__rating {
+  flex-shrink: 0;
+  padding: 0.25rem 0.55rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 193, 7, 0.12);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #b77900;
+}
+
+.guide-card__expertise {
+  margin: 0.9rem 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.guide-card__details {
+  display: grid;
+  gap: 0.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-size: 0.78rem;
+}
+
+.guide-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.guide-card__price {
+  margin: 0;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.guide-card__price span {
+  color: var(--color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+}
 
 /* ---------------------------------------------------------------------
    10. PACKAGES
@@ -1524,7 +1629,9 @@ section {
 /* Laptop */
 @media (max-width: 1180px) {
   .destinations__grid,
-  .packages__grid { grid-template-columns: repeat(2, 1fr); }
+  .packages__grid,
+  .guides__grid { grid-template-columns: repeat(2, 1fr); }
+
   .culture__grid { grid-template-columns: repeat(3, 1fr); }
   .gallery__masonry { columns: 3 200px; }
 }
@@ -1589,7 +1696,12 @@ section {
 
   .destinations__grid,
   .packages__grid,
+  .guides__grid,
   .culture__grid { grid-template-columns: 1fr; }
+
+  .guide-card__img {
+    height: 230px;
+  }
 
   .gallery__masonry { columns: 2 160px; }
 
@@ -1603,7 +1715,6 @@ section {
 
   .timeline__stop { min-width: 92px; }
 }
-
 /* ---------------------------------------------------------------------
    20. REDUCED MOTION
 --------------------------------------------------------------------- */
